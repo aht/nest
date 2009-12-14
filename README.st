@@ -1,0 +1,117 @@
+\title: NEST Documentation
+\=========================
+
+\p:
+	NEST stands for \em< Notation for Expressing Structured Text >. It is a
+	markup language with the same semantics as XML but is designed to be more
+	readable and easier to write by hand.
+
+
+\h2: Syntax
+\----------
+
+\p:
+	NEST can express familiar XML concepts such as elements, tags and attributes.
+	A structural element is introduced by a backslash followed by the tag name;
+	the content of the element follows in enclosing angle brackets, like this:
+	\code <
+		\\html \<
+			Your page goes here.
+		\>
+	>
+
+\p:
+	There are two shortcuts to make NEST more readable and less tangled.
+
+\p:
+	Tag without following brackets takes the next word or element in the same
+	line to be the content, e.g.
+
+	\code:
+		This \\strong word has strength, where as \\em this is emphasized. You can
+		also chain the tags as in \\em \\strong <this phrase>.
+
+\p:
+	Tag followed by a colon takes the rest of the line to be the content, e.g.
+
+	\code:
+		\\title: NEST documentation
+
+	If there is nothing but white spaces after the colon, the tag takes an
+	indented block to be the content, e.g.
+
+	\code <
+		\\code:
+			x = 2**64
+			print "x =", x
+	>
+
+\p:
+	Attributes are placed between the tag and the content in enclosing square
+	brackets, e.g.
+
+	\code:
+		\\div [id="main" class="long article"] \< ... \>
+
+\p:
+	NEST's directives can be escaped with the backslash, for example \\\\tag is a
+	literal \\tag (in contrast, a <tag> in XML is &lt;tag&gt;). Brackets that are
+	not part of any tag are also treated as literals.
+
+\p:
+	NEST allows comments in the form of \\==+ < ... > or \\--+ < ... >, empty
+	comments can be used decoratively to make NEST source code more readable,
+	e.g.
+
+	\code:
+		\\h2: Introduction
+		\\----------------
+
+
+\h2: Transformation
+\------------------
+
+\p:
+	NEST was originally intended to be transformed into XHTML. This task is
+	performed by the program \var xnest.
+
+\p:
+	Since NEST is a markup language, you can interpret the structured text
+	however you want. You can for example, write DocBook in NEST.
+
+
+\h2: Convention
+\--------------
+
+\p:
+	The prefered extension for files with NEST markup is ".st", for "structured
+	text".
+
+
+\h2: Q&A
+\-------
+
+\div[class=q]: What can be expressed in SGML but not in NEST?
+\div[class=a]:
+	Overlapping tags, e.g.
+	\code:
+		<foo> spam <bar> inter-mingled with </foo> ham </bar>
+	I certainly hope this "feature" will not be missed!
+
+\div[class=q]: What's the relation between NEST and XML?
+\div[class=a]:
+	NEST is a markup language with the same semantics as XML. Practically, this
+	means that NEST is an alternative notation for XML.
+
+\div[class=q]: What's the relation between NEST and HAML?
+\div[class=a]:
+	NEST is a markup language with the same semantics as XML, whereas HAML is a
+	both a pre-processor for XHTML and a templating engine.  A practical
+	difference is that it is awkward to write text where white space needs to be
+	preserved in HAML.
+
+\div[class=q]: What's the relation between NEST and YAML?
+\div[class=a]:
+	NEST is a textual markup language, whereas YAML is a data serialization
+	format.
+
