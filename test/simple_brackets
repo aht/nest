@@ -1,0 +1,20 @@
+\body<
+
+stuff
+
+\b< \i<text> >
+
+\outer<
+	\inner< spam >
+	\inner< ham >
+
+	\verse<
+	Roses are red
+	Violets are blue
+		Code do have weird colors
+		\though<
+			I prefer them white and black.
+		>
+	>
+>
+>
