@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'Y\x80_ZO+@a\xb2\xdf\x04\x9b\xc4\x18\xa0A'
+_lr_signature = '\xae1\xb2m\x9d\x9a\xb0MA\xfc\x16\xab\xcc\xebq\x94'
     
-_lr_action_items = {'END':([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,],[-1,10,15,17,19,21,-2,-8,-18,-14,22,-15,-9,27,-7,28,-10,29,-11,-4,-12,-13,-16,-17,-5,-3,-6,]),'START2':([1,],[4,]),'START3':([1,],[5,]),'START1':([1,],[6,]),'START4':([1,],[7,]),'START5':([1,],[8,]),'ESCAPED':([11,14,24,25,26,],[-18,25,25,-16,-17,]),'TAG':([0,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,],[1,-1,1,1,1,1,-2,-8,-18,-14,1,-15,-9,1,-7,1,-10,1,-11,-4,-12,-13,-16,-17,-5,-3,-6,]),'CDATA':([3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,],[-1,11,11,11,11,-2,-8,-18,-14,11,26,-9,11,-7,11,-10,11,-11,-4,-12,26,-16,-17,-5,-3,-6,]),'$end':([2,3,9,10,15,17,19,21,22,27,28,29,],[0,-1,-2,-8,-9,-7,-10,-11,-4,-5,-3,-6,]),}
+_lr_action_items = {'END':([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,],[8,13,15,17,19,-2,-16,-12,20,-13,-3,25,-1,26,-4,27,-5,-7,-10,-11,-14,-15,-8,-6,-9,]),'START2':([2,],[3,]),'START3':([2,],[4,]),'START1':([2,],[5,]),'START4':([2,],[6,]),'START5':([2,],[7,]),'ESCAPED':([9,12,22,23,24,],[-16,23,23,-14,-15,]),'TAG':([0,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,],[2,2,2,2,2,-2,-16,-12,2,-13,-3,2,-1,2,-4,2,-5,-7,-10,-11,-14,-15,-8,-6,-9,]),'CDATA':([3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,],[9,9,9,9,-2,-16,-12,9,24,-3,9,-1,9,-4,9,-5,-7,-10,24,-14,-15,-8,-6,-9,]),'$end':([1,8,13,15,17,19,20,25,26,27,],[0,-2,-3,-1,-4,-5,-7,-8,-6,-9,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'body':([1,],[3,]),'empty_body':([1,],[9,]),'content':([4,5,6,7,],[13,16,18,20,]),'cdata':([4,5,6,7,13,16,18,20,],[14,14,14,14,24,24,24,24,]),'element':([0,4,5,6,7,13,16,18,20,],[2,12,12,12,12,23,23,23,23,]),}
+_lr_goto_items = {'content':([3,4,5,6,],[11,14,16,18,]),'cdata':([3,4,5,6,11,14,16,18,],[12,12,12,12,22,22,22,22,]),'element':([0,3,4,5,6,11,14,16,18,],[1,10,10,10,10,21,21,21,21,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,22 +26,20 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> element","S'",1,None,None,None),
-  ('element -> TAG body','element',2,'p_element','./xnest.py',239),
-  ('element -> TAG empty_body','element',2,'p_element','./xnest.py',240),
-  ('body -> START1 content END','body',3,'p_body','./xnest.py',244),
-  ('body -> START2 content END','body',3,'p_body','./xnest.py',245),
-  ('body -> START3 content END','body',3,'p_body','./xnest.py',246),
-  ('body -> START4 content END','body',3,'p_body','./xnest.py',247),
-  ('empty_body -> START1 END','empty_body',2,'p_empty_body','./xnest.py',251),
-  ('empty_body -> START2 END','empty_body',2,'p_empty_body','./xnest.py',252),
-  ('empty_body -> START3 END','empty_body',2,'p_empty_body','./xnest.py',253),
-  ('empty_body -> START4 END','empty_body',2,'p_empty_body','./xnest.py',254),
-  ('empty_body -> START5 END','empty_body',2,'p_empty_body','./xnest.py',255),
-  ('content -> content element','content',2,'p_content','./xnest.py',259),
-  ('content -> content cdata','content',2,'p_content','./xnest.py',260),
-  ('content -> element','content',1,'p_content0','./xnest.py',264),
-  ('content -> cdata','content',1,'p_content0','./xnest.py',265),
-  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest.py',269),
-  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest.py',270),
-  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest.py',274),
+  ('element -> TAG START1 END','element',3,'p_element0','./xnest.py',242),
+  ('element -> TAG START2 END','element',3,'p_element0','./xnest.py',243),
+  ('element -> TAG START3 END','element',3,'p_element0','./xnest.py',244),
+  ('element -> TAG START4 END','element',3,'p_element0','./xnest.py',245),
+  ('element -> TAG START5 END','element',3,'p_element0','./xnest.py',246),
+  ('element -> TAG START1 content END','element',4,'p_element1','./xnest.py',250),
+  ('element -> TAG START2 content END','element',4,'p_element2','./xnest.py',254),
+  ('element -> TAG START3 content END','element',4,'p_element3','./xnest.py',258),
+  ('element -> TAG START4 content END','element',4,'p_element4','./xnest.py',262),
+  ('content -> content element','content',2,'p_content','./xnest.py',266),
+  ('content -> content cdata','content',2,'p_content','./xnest.py',267),
+  ('content -> element','content',1,'p_content0','./xnest.py',271),
+  ('content -> cdata','content',1,'p_content0','./xnest.py',272),
+  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest.py',276),
+  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest.py',277),
+  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest.py',281),
 ]

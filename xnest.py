@@ -28,7 +28,7 @@ class Lexer(object):
 	def input(self, s):
 		self.lexer.input(s)
 
-	def emit(self, type, value=''):
+	def emit(self, type, value='\n'):
 		t = lex.LexToken()
 		t.type = type
 		t.value = value
@@ -111,7 +111,7 @@ class Lexer(object):
 			self.lvl_stack.append(lvl)
 		t.lexer.pop_state()
 		t.lexer.push_state('indent')
-		t.value = t.value[1:-lvl]
+		t.value = t.value[1:]
 		t.lexer.lineno += t.value.count('\n')
 		return t
 
@@ -134,6 +134,7 @@ class Lexer(object):
 		r'[ \t]+'
 		t.lexer.pop_state()
 		t.lexer.push_state('oneword')
+		t.value = ''
 		return t
 
 	# oneword style with empty body
@@ -145,6 +146,7 @@ class Lexer(object):
 		if lvl <= self.lvl_stack[-1]:
 			self.emit_ENDs(lvl)
 		t.lexer.lineno += t.value.count('\n')
+		t.value = ''
 		return t
 
 	#________________
@@ -167,6 +169,7 @@ class Lexer(object):
 			if lvl <= self.lvl_stack[-1]:
 				self.emit_ENDs(lvl)
 		t.lexer.lineno += nl
+		t.value = ''
 		return t
 
 	#________________
@@ -204,7 +207,7 @@ class Lexer(object):
 
 	def t_indent_CDATA(self, t):
 		r'[^\\\r\n]+'
-		t.value += '\n'
+		t.value += '\n' + '\t' * self.lvl_stack[-1]
 		return t
 
 	def t_indent_END(self, t):
@@ -237,25 +240,29 @@ class Parser(object):
 	def parse(self, code):
 		return self.parser.parse(code, lexer=self.lexer)
 
-	def p_element(self, p):
-		'''element : TAG body
-							 | TAG empty_body'''
-		p[0] = '<%s>%s</%s>' % (p[1], p[2], p[1])
+	def p_element0(self, p):
+		'''element : TAG START1 END
+		              | TAG START2 END
+		              | TAG START3 END
+		              | TAG START4 END
+		              | TAG START5 END'''
+		p[0] = '%s<%s />%s' % (p[2], p[1], p[3])
 
-	def p_body(self, p):
-		'''body : START1 content END
-		        | START2 content END
-		        | START3 content END
-		        | START4 content END'''
-		p[0] = p[1] + p[2] + p[3]
+	def p_element1(self, p):
+		'element : TAG START1 content END'
+		p[0] = '<%s>%s%s</%s>%s' % (p[1], p[2], p[3], p[1], p[4])
 
-	def p_empty_body(self, p):
-		'''empty_body : START1 END
-		              | START2 END
-		              | START3 END
-		              | START4 END
-		              | START5 END'''
-		p[0] = p[1] + p[2]
+	def p_element2(self, p):
+		'element : TAG START2 content END'
+		p[0] = '<%s>%s</%s>%s' % (p[1], p[3], p[1], p[4])
+
+	def p_element3(self, p):
+		'element : TAG START3 content END'
+		p[0] = '%s<%s>%s</%s>%s' % (p[2], p[1], p[3], p[1], p[4])
+
+	def p_element4(self, p):
+		'element : TAG START4 content END'
+		p[0] = '<%s>%s</%s>%s' % (p[1], p[3], p[1], p[4])
 
 	def p_content(self, p):
 		'''content : content element
