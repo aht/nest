@@ -207,60 +207,54 @@ class Parser(object):
 	def parse(self, code):
 		return self.parser.parse(code, lexer=self.lexer)
 
-	@staticmethod
-	def p_element(p):
+	def p_element(self, p):
 		'''element : TAG body
 							 | TAG empty_body'''
 		p[0] = '<%s>%s</%s>' % (p[1], p[2], p[1])
 
-	@staticmethod
-	def p_body(p):
+	def p_body(self, p):
 		'''body : START1 content END
 		        | START2 content END
 		        | START3 content END
 		        | START4 content END'''
-		p[0] = p[2]
+		p[0] = p[1] + p[2] + p[3]
 
-	@staticmethod
-	def p_empty_body(p):
+	def p_empty_body(self, p):
 		'''empty_body : START1 END
 		              | START2 END
 		              | START3 END
 		              | START4 END'''
-		p[0] = ''
+		p[0] = p[1] + p[2]
 
-	@staticmethod
-	def p_content(p):
+	def p_content(self, p):
 		'''content : content element
 		           | content cdata'''
 		p[0] = p[1] + p[2]
 
-	@staticmethod
-	def p_content0(p):
+	def p_content0(self, p):
 		'''content : element
 		           | cdata'''
 		p[0] = p[1]
 
-	@staticmethod
-	def p_cdata(p):
+	def p_cdata(self, p):
 		'''cdata : cdata ESCAPED
 		         | cdata CDATA'''
 		p[0] = p[1] + p[2]
 
-	@staticmethod
-	def p_cdata0(p):
+	def p_cdata0(self, p):
 		'cdata : CDATA'
 		p[0] = p[1]
+
 
 #________________________________________________________________________
 # Main
 
 if __name__ == '__main__':
 	lexer = Lexer()
-	parser = Parser(lexer=lexer)
-	if 0:
+	if len(sys.argv) >= 2 and sys.argv[1] == '-l':
 		lexer.input(sys.stdin.read())
 		for t in lexer:
 			print t
 	else:
+		parser = Parser(lexer=lexer)
 		print parser.parse(sys.stdin.read())
