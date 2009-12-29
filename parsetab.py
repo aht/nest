@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '\xae1\xb2m\x9d\x9a\xb0MA\xfc\x16\xab\xcc\xebq\x94'
+_lr_signature = '\xef\x1b\xd4\x14\xc4a\x81Z\x11\x89l\xd2\xb1s0\xa2'
     
-_lr_action_items = {'END':([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,],[8,13,15,17,19,-2,-16,-12,20,-13,-3,25,-1,26,-4,27,-5,-7,-10,-11,-14,-15,-8,-6,-9,]),'START2':([2,],[3,]),'START3':([2,],[4,]),'START1':([2,],[5,]),'START4':([2,],[6,]),'START5':([2,],[7,]),'ESCAPED':([9,12,22,23,24,],[-16,23,23,-14,-15,]),'TAG':([0,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,],[2,2,2,2,2,-2,-16,-12,2,-13,-3,2,-1,2,-4,2,-5,-7,-10,-11,-14,-15,-8,-6,-9,]),'CDATA':([3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,],[9,9,9,9,-2,-16,-12,9,24,-3,9,-1,9,-4,9,-5,-7,-10,24,-14,-15,-8,-6,-9,]),'$end':([1,8,13,15,17,19,20,25,26,27,],[0,-2,-3,-1,-4,-5,-7,-8,-6,-9,]),}
+_lr_action_items = {'END':([4,5,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[13,18,20,22,24,-29,-11,-24,32,-28,-25,-12,37,-10,38,-13,39,-14,40,42,44,46,48,-16,-22,-23,-26,-27,-17,-15,-18,-2,49,-3,50,-1,51,-4,52,-5,-7,-8,-6,-9,]),'ATTR_EQ':([3,10,11,25,31,],[9,-20,9,-21,-19,]),'START2':([2,10,11,25,31,],[4,-20,26,-21,-19,]),'START3':([2,10,11,25,31,],[5,-20,27,-21,-19,]),'START1':([2,10,11,25,31,],[6,-20,28,-21,-19,]),'START4':([2,10,11,25,31,],[7,-20,29,-21,-19,]),'START5':([2,10,11,25,31,],[8,-20,30,-21,-19,]),'ESCAPED':([4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[12,12,12,12,-29,-11,-24,12,-28,35,-12,12,-10,12,-13,12,-14,12,12,12,12,-16,-22,35,-26,-27,-17,-15,-18,-2,12,-3,12,-1,12,-4,12,-5,-7,-8,-6,-9,]),'VALUE':([9,],[25,]),'TAG':([0,4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[2,2,2,2,2,-29,-11,-24,2,-28,-25,-12,2,-10,2,-13,2,-14,2,2,2,2,-16,-22,-23,-26,-27,-17,-15,-18,-2,2,-3,2,-1,2,-4,2,-5,-7,-8,-6,-9,]),'CDATA':([4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[16,16,16,16,-29,-11,-24,16,-28,36,-12,16,-10,16,-13,16,-14,16,16,16,16,-16,-22,36,-26,-27,-17,-15,-18,-2,16,-3,16,-1,16,-4,16,-5,-7,-8,-6,-9,]),'TAG_ATTR':([0,4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[3,3,3,3,3,-29,-11,-24,3,-28,-25,-12,3,-10,3,-13,3,-14,3,3,3,3,-16,-22,-23,-26,-27,-17,-15,-18,-2,3,-3,3,-1,3,-4,3,-5,-7,-8,-6,-9,]),'$end':([1,13,18,20,22,24,32,37,38,39,40,42,44,46,48,49,50,51,52,],[0,-11,-12,-10,-13,-14,-16,-17,-15,-18,-2,-3,-1,-4,-5,-7,-8,-6,-9,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'content':([3,4,5,6,],[11,14,16,18,]),'cdata':([3,4,5,6,11,14,16,18,],[12,12,12,12,22,22,22,22,]),'element':([0,3,4,5,6,11,14,16,18,],[1,10,10,10,10,21,21,21,21,]),}
+_lr_goto_items = {'content':([4,5,6,7,26,27,28,29,],[15,19,21,23,41,43,45,47,]),'attrvalue':([3,11,],[10,31,]),'avlist':([3,],[11,]),'cdata':([4,5,6,7,15,19,21,23,26,27,28,29,41,43,45,47,],[17,17,17,17,34,34,34,34,17,17,17,17,34,34,34,34,]),'element':([0,4,5,6,7,15,19,21,23,26,27,28,29,41,43,45,47,],[1,14,14,14,14,33,33,33,33,14,14,14,14,33,33,33,33,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,20 +26,33 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> element","S'",1,None,None,None),
-  ('element -> TAG START1 END','element',3,'p_element0','./xnest.py',242),
-  ('element -> TAG START2 END','element',3,'p_element0','./xnest.py',243),
-  ('element -> TAG START3 END','element',3,'p_element0','./xnest.py',244),
-  ('element -> TAG START4 END','element',3,'p_element0','./xnest.py',245),
-  ('element -> TAG START5 END','element',3,'p_element0','./xnest.py',246),
-  ('element -> TAG START1 content END','element',4,'p_element1','./xnest.py',250),
-  ('element -> TAG START2 content END','element',4,'p_element2','./xnest.py',254),
-  ('element -> TAG START3 content END','element',4,'p_element3','./xnest.py',258),
-  ('element -> TAG START4 content END','element',4,'p_element4','./xnest.py',262),
-  ('content -> content element','content',2,'p_content','./xnest.py',266),
-  ('content -> content cdata','content',2,'p_content','./xnest.py',267),
-  ('content -> element','content',1,'p_content0','./xnest.py',271),
-  ('content -> cdata','content',1,'p_content0','./xnest.py',272),
-  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest.py',276),
-  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest.py',277),
-  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest.py',281),
+  ('element -> TAG_ATTR avlist START1 END','element',4,'p_element_attr0','./xnest',257),
+  ('element -> TAG_ATTR avlist START2 END','element',4,'p_element_attr0','./xnest',258),
+  ('element -> TAG_ATTR avlist START3 END','element',4,'p_element_attr0','./xnest',259),
+  ('element -> TAG_ATTR avlist START4 END','element',4,'p_element_attr0','./xnest',260),
+  ('element -> TAG_ATTR avlist START5 END','element',4,'p_element_attr0','./xnest',261),
+  ('element -> TAG_ATTR avlist START1 content END','element',5,'p_element_attr1','./xnest',265),
+  ('element -> TAG_ATTR avlist START2 content END','element',5,'p_element_attr1','./xnest',266),
+  ('element -> TAG_ATTR avlist START3 content END','element',5,'p_element_attr1','./xnest',267),
+  ('element -> TAG_ATTR avlist START4 content END','element',5,'p_element_attr1','./xnest',268),
+  ('element -> TAG START1 END','element',3,'p_element0','./xnest',272),
+  ('element -> TAG START2 END','element',3,'p_element0','./xnest',273),
+  ('element -> TAG START3 END','element',3,'p_element0','./xnest',274),
+  ('element -> TAG START4 END','element',3,'p_element0','./xnest',275),
+  ('element -> TAG START5 END','element',3,'p_element0','./xnest',276),
+  ('element -> TAG START1 content END','element',4,'p_element1','./xnest',280),
+  ('element -> TAG START2 content END','element',4,'p_element1','./xnest',281),
+  ('element -> TAG START3 content END','element',4,'p_element1','./xnest',282),
+  ('element -> TAG START4 content END','element',4,'p_element1','./xnest',283),
+  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','./xnest',287),
+  ('avlist -> attrvalue','avlist',1,'p_avlist0','./xnest',291),
+  ('attrvalue -> ATTR_EQ VALUE','attrvalue',2,'p_attrvalue','./xnest',295),
+  ('content -> content element','content',2,'p_content','./xnest',299),
+  ('content -> content cdata','content',2,'p_content','./xnest',300),
+  ('content -> element','content',1,'p_content0','./xnest',304),
+  ('content -> cdata','content',1,'p_content0','./xnest',305),
+  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest',309),
+  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest',310),
+  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest',314),
+  ('cdata -> ESCAPED','cdata',1,'p_cdata0','./xnest',315),
 ]

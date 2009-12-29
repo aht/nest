@@ -1,5 +1,13 @@
+\html<
+
+\head<
+
 \title: NEST Documentation
 \=========================
+
+>
+
+\body<
 
 \p:
 	NEST stands for \em< Notation for Expressing Structured Text >. It is a
@@ -15,9 +23,9 @@
 	A structural element is introduced by a backslash followed by the tag name;
 	the content of the element follows in enclosing angle brackets, like this:
 	\code <
-		\\html \<
+		\\html <
 			Your page goes here.
-		\>
+		>
 	>
 
 \p:
@@ -51,7 +59,7 @@
 	brackets, e.g.
 
 	\code:
-		\\div [id="main" class="long article"] \< ... \>
+		\\div [id="main" class="long article"] < ... >
 
 \p:
 	NEST's directives can be escaped with the backslash, for example \\\\tag is a
@@ -94,8 +102,9 @@
 \div[class=q]: What can be expressed in SGML but not in NEST?
 \div[class=a]:
 	Overlapping tags, e.g.
-	\code:
+	\code <
 		<foo> spam <bar> inter-mingled with </foo> ham </bar>
+	>
 	I certainly hope this "feature" will not be missed!
 
 \div[class=q]: What's the relation between NEST and XML?
@@ -115,3 +124,5 @@
 	NEST is a textual markup language, whereas YAML is a data serialization
 	format.
 
+>
+>

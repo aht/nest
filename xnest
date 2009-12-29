@@ -16,7 +16,7 @@ class Lexer(object):
 		('indent','exclusive'),
 	)
 
-	tokens = ("TAG TAG_ATTR ATTR EQ VALUE END_ATTR " +
+	tokens = ("TAG TAG_ATTR ATTR_EQ VALUE " +
 			"START1 START2 START3 START4 START5 END " + 
 			"CDATA ESCAPED WS").split()
 
@@ -37,7 +37,10 @@ class Lexer(object):
 		self.emitted.append(t)
 
 	def emit_ENDs(self, lvl):
-		idx = self.lvl_stack.index(lvl)
+		try:
+			idx = self.lvl_stack.index(lvl)
+		except ValueError:
+			raise SyntaxError("Bad indentation in line %s" % self.lexer.lineno)
 		while self.lexer.lexstate in ('oneword', 'oneline'):
 			self.emit('END')
 			self.lexer.pop_state()
@@ -65,14 +68,18 @@ class Lexer(object):
 					yield t
 		return nexttok()
 
-	t_INITIAL_ESCAPED = r'\\\\'
 	t_INITIAL_ignore_WS = r'[ \t\r\n]+'
+	
+	def t_ANY_ESCAPED(self, t):
+		r'\\\\'
+		return t
 
 	def t_ANY_TAG_ATTR(self, t):
 		r'\\[^ \t\r\n\[\]<>:]+[ \t\r\n]*\['
 		t.value = t.value[1:]
 		t.lexer.push_state('attr')
 		t.lexer.lineno += t.value.count('\n')
+		t.value = t.value[:-1]
 		return t
 
 	def t_ANY_TAG(self, t):
@@ -88,16 +95,22 @@ class Lexer(object):
 	#________________
 	# attr
 
-	t_attr_ATTR = r'[^\= \t\n\r]+'
-	t_attr_EQ = '='
-	t_attr_VALUE = r'(\'.*\')|(".*")|[^= \t\r\n\]]+'
 	t_attr_ignore_WS = r'[ \t\r\n]+'
+
+	def t_attr_ATTR_EQ(self, t):
+		r'[^\=\] \t\n\r]+='
+		t.value = t.value[:-1]
+		return t
+
+	def t_attr_VALUE(self, t):
+		r'(\'.*\')|(".*")|[^= \t\r\n\]]+'
+		return t
 
 	def t_attr_END_ATTR(self, t):
 		r'\]'
 		t.lexer.pop_state()
 		t.lexer.push_state('body')
-		return t
+		pass
 
 	#________________
 	# body
@@ -237,32 +250,50 @@ class Parser(object):
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self, **kwargs)
 
-	def parse(self, code):
-		return self.parser.parse(code, lexer=self.lexer)
+	def parse(self, code, **kwargs):
+		return self.parser.parse(code, lexer=self.lexer, **kwargs)
+
+	def p_element_attr0(self, p):
+		'''element : TAG_ATTR avlist START1 END
+		           | TAG_ATTR avlist START2 END
+		           | TAG_ATTR avlist START3 END
+		           | TAG_ATTR avlist START4 END
+		           | TAG_ATTR avlist START5 END'''
+		p[0] = '%s<%s %s />%s' % (p[3], p[1], p[2], p[4])
+
+	def p_element_attr1(self, p):
+		'''element : TAG_ATTR avlist START1 content END
+		           | TAG_ATTR avlist START2 content END
+		           | TAG_ATTR avlist START3 content END
+		           | TAG_ATTR avlist START4 content END'''
+		p[0] = '<%s %s>%s%s</%s>%s' % (p[1], p[2], p[3], p[4], p[1], p[5])
 
 	def p_element0(self, p):
 		'''element : TAG START1 END
-		              | TAG START2 END
-		              | TAG START3 END
-		              | TAG START4 END
-		              | TAG START5 END'''
+		           | TAG START2 END
+		           | TAG START3 END
+		           | TAG START4 END
+		           | TAG START5 END'''
 		p[0] = '%s<%s />%s' % (p[2], p[1], p[3])
 
 	def p_element1(self, p):
-		'element : TAG START1 content END'
+		'''element : TAG START1 content END
+		           | TAG START2 content END
+		           | TAG START3 content END
+		           | TAG START4 content END'''
 		p[0] = '<%s>%s%s</%s>%s' % (p[1], p[2], p[3], p[1], p[4])
 
-	def p_element2(self, p):
-		'element : TAG START2 content END'
-		p[0] = '<%s>%s</%s>%s' % (p[1], p[3], p[1], p[4])
+	def p_avlist(self, p):
+		'avlist : avlist attrvalue'
+		p[0] = p[1] + p[2]
 
-	def p_element3(self, p):
-		'element : TAG START3 content END'
-		p[0] = '%s<%s>%s</%s>%s' % (p[2], p[1], p[3], p[1], p[4])
+	def p_avlist0(self, p):
+		'avlist : attrvalue'
+		p[0] = p[1]
 
-	def p_element4(self, p):
-		'element : TAG START4 content END'
-		p[0] = '<%s>%s</%s>%s' % (p[1], p[3], p[1], p[4])
+	def p_attrvalue(self, p):
+		'attrvalue : ATTR_EQ VALUE'
+		p[0] = p[1] + '=' + p[2]
 
 	def p_content(self, p):
 		'''content : content element
@@ -280,7 +311,8 @@ class Parser(object):
 		p[0] = p[1] + p[2]
 
 	def p_cdata0(self, p):
-		'cdata : CDATA'
+		'''cdata : CDATA
+		         | ESCAPED'''
 		p[0] = p[1]
 
 
@@ -289,11 +321,19 @@ class Parser(object):
 
 if __name__ == '__main__':
 	lexer = Lexer()
+	import getopt
 	import sys
-	if len(sys.argv) >= 2 and sys.argv[1] == '-l':
+	lexonly, debug = False, False
+	opts, args = getopt.getopt(sys.argv[1:], 'ld')
+	for o, v in opts:
+		if o == '-l':
+			lexonly = True
+		elif o == '-d':
+			debug = True
+	if lexonly:
 		lexer.input(sys.stdin.read())
 		for t in lexer:
 			print t
 	else:
 		parser = Parser(lexer=lexer)
-		print parser.parse(sys.stdin.read())
+		print parser.parse(sys.stdin.read(), debug=debug)
