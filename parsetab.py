@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '\xef\x1b\xd4\x14\xc4a\x81Z\x11\x89l\xd2\xb1s0\xa2'
+_lr_signature = '\xe3\xbf\x9a\xe5\x9a\x13\x85\x00\x86\xd4\xa1:\xde[3\xd3'
     
-_lr_action_items = {'END':([4,5,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[13,18,20,22,24,-29,-11,-24,32,-28,-25,-12,37,-10,38,-13,39,-14,40,42,44,46,48,-16,-22,-23,-26,-27,-17,-15,-18,-2,49,-3,50,-1,51,-4,52,-5,-7,-8,-6,-9,]),'ATTR_EQ':([3,10,11,25,31,],[9,-20,9,-21,-19,]),'START2':([2,10,11,25,31,],[4,-20,26,-21,-19,]),'START3':([2,10,11,25,31,],[5,-20,27,-21,-19,]),'START1':([2,10,11,25,31,],[6,-20,28,-21,-19,]),'START4':([2,10,11,25,31,],[7,-20,29,-21,-19,]),'START5':([2,10,11,25,31,],[8,-20,30,-21,-19,]),'ESCAPED':([4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[12,12,12,12,-29,-11,-24,12,-28,35,-12,12,-10,12,-13,12,-14,12,12,12,12,-16,-22,35,-26,-27,-17,-15,-18,-2,12,-3,12,-1,12,-4,12,-5,-7,-8,-6,-9,]),'VALUE':([9,],[25,]),'TAG':([0,4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[2,2,2,2,2,-29,-11,-24,2,-28,-25,-12,2,-10,2,-13,2,-14,2,2,2,2,-16,-22,-23,-26,-27,-17,-15,-18,-2,2,-3,2,-1,2,-4,2,-5,-7,-8,-6,-9,]),'CDATA':([4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[16,16,16,16,-29,-11,-24,16,-28,36,-12,16,-10,16,-13,16,-14,16,16,16,16,-16,-22,36,-26,-27,-17,-15,-18,-2,16,-3,16,-1,16,-4,16,-5,-7,-8,-6,-9,]),'TAG_ATTR':([0,4,5,6,7,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[3,3,3,3,3,-29,-11,-24,3,-28,-25,-12,3,-10,3,-13,3,-14,3,3,3,3,-16,-22,-23,-26,-27,-17,-15,-18,-2,3,-3,3,-1,3,-4,3,-5,-7,-8,-6,-9,]),'$end':([1,13,18,20,22,24,32,37,38,39,40,42,44,46,48,49,50,51,52,],[0,-11,-12,-10,-13,-14,-16,-17,-15,-18,-2,-3,-1,-4,-5,-7,-8,-6,-9,]),}
+_lr_action_items = {'COMMENT':([0,1,2,3,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,],[4,-6,-41,-5,-4,4,-40,-38,-39,4,4,4,4,4,-3,-2,-1,4,4,4,4,-31,4,-32,4,-30,4,-33,4,-34,4,-21,4,-22,4,-20,4,-23,4,-24,4,4,4,4,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,4,-13,4,-11,4,-14,4,-15,-8,-9,-7,-10,]),'END':([1,2,3,5,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,52,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,],[-6,-41,-5,-4,-40,-38,-39,28,30,32,34,36,-3,-2,-1,38,40,42,44,46,-31,54,-32,55,-30,56,-33,57,-34,58,-21,59,-22,60,-20,61,-23,62,-24,63,65,67,69,71,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,72,-13,73,-11,74,-14,75,-15,-8,-9,-7,-10,]),'CDATA':([0,1,2,3,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,],[8,-6,-41,11,-4,8,-40,-38,-39,8,8,8,8,8,-3,11,-1,8,8,8,8,-31,8,-32,8,-30,8,-33,8,-34,8,-21,8,-22,8,-20,8,-23,8,-24,8,8,8,8,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,8,-13,8,-11,8,-14,8,-15,-8,-9,-7,-10,]),'START2':([4,7,26,27,47,53,],[12,20,-36,48,-37,-35,]),'START3':([4,7,26,27,47,53,],[13,21,-36,49,-37,-35,]),'START1':([4,7,26,27,47,53,],[14,22,-36,50,-37,-35,]),'ATTR_EQ':([9,26,27,47,53,],[25,-36,25,-37,-35,]),'START4':([4,7,26,27,47,53,],[15,23,-36,51,-37,-35,]),'START5':([4,7,26,27,47,53,],[16,24,-36,52,-37,-35,]),'ESCAPED':([0,1,2,3,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,],[2,-6,-41,10,-4,2,-40,-38,-39,2,2,2,2,2,-3,10,-1,2,2,2,2,-31,2,-32,2,-30,2,-33,2,-34,2,-21,2,-22,2,-20,2,-23,2,-24,2,2,2,2,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,2,-13,2,-11,2,-14,2,-15,-8,-9,-7,-10,]),'TAG':([0,1,2,3,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,],[7,-6,-41,-5,-4,7,-40,-38,-39,7,7,7,7,7,-3,-2,-1,7,7,7,7,-31,7,-32,7,-30,7,-33,7,-34,7,-21,7,-22,7,-20,7,-23,7,-24,7,7,7,7,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,7,-13,7,-11,7,-14,7,-15,-8,-9,-7,-10,]),'VALUE':([25,],[47,]),'TAG_ATTR':([0,1,2,3,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49,50,51,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,],[9,-6,-41,-5,-4,9,-40,-38,-39,9,9,9,9,9,-3,-2,-1,9,9,9,9,-31,9,-32,9,-30,9,-33,9,-34,9,-21,9,-22,9,-20,9,-23,9,-24,9,9,9,9,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,9,-13,9,-11,9,-14,9,-15,-8,-9,-7,-10,]),'$end':([1,2,3,5,6,8,10,11,17,18,19,28,30,32,34,36,38,40,42,44,46,54,55,56,57,58,59,60,61,62,63,65,67,69,71,72,73,74,75,],[-6,-41,-5,-4,0,-40,-38,-39,-3,-2,-1,-31,-32,-30,-33,-34,-21,-22,-20,-23,-24,-26,-27,-25,-28,-29,-17,-18,-16,-19,-12,-13,-11,-14,-15,-8,-9,-7,-10,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'content':([4,5,6,7,26,27,28,29,],[15,19,21,23,41,43,45,47,]),'attrvalue':([3,11,],[10,31,]),'avlist':([3,],[11,]),'cdata':([4,5,6,7,15,19,21,23,26,27,28,29,41,43,45,47,],[17,17,17,17,34,34,34,34,17,17,17,17,34,34,34,34,]),'element':([0,4,5,6,7,15,19,21,23,26,27,28,29,41,43,45,47,],[1,14,14,14,14,33,33,33,33,14,14,14,14,33,33,33,33,]),}
+_lr_goto_items = {'comment':([0,6,12,13,14,15,16,20,21,22,23,29,31,33,35,37,39,41,43,45,48,49,50,51,64,66,68,70,],[1,17,1,1,1,1,1,1,1,1,1,17,17,17,17,17,17,17,17,17,1,1,1,1,17,17,17,17,]),'attrvalue':([9,27,],[26,53,]),'element':([0,6,12,13,14,15,16,20,21,22,23,29,31,33,35,37,39,41,43,45,48,49,50,51,64,66,68,70,],[5,19,5,5,5,5,5,5,5,5,5,19,19,19,19,19,19,19,19,19,5,5,5,5,19,19,19,19,]),'content':([0,12,13,14,15,16,20,21,22,23,48,49,50,51,],[6,29,31,33,35,37,39,41,43,45,64,66,68,70,]),'cdata':([0,6,12,13,14,15,16,20,21,22,23,29,31,33,35,37,39,41,43,45,48,49,50,51,64,66,68,70,],[3,18,3,3,3,3,3,3,3,3,3,18,18,18,18,18,18,18,18,18,3,3,3,3,18,18,18,18,]),'avlist':([9,],[27,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -25,34 +25,46 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> element","S'",1,None,None,None),
-  ('element -> TAG_ATTR avlist START1 END','element',4,'p_element_attr0','./xnest',257),
-  ('element -> TAG_ATTR avlist START2 END','element',4,'p_element_attr0','./xnest',258),
-  ('element -> TAG_ATTR avlist START3 END','element',4,'p_element_attr0','./xnest',259),
-  ('element -> TAG_ATTR avlist START4 END','element',4,'p_element_attr0','./xnest',260),
-  ('element -> TAG_ATTR avlist START5 END','element',4,'p_element_attr0','./xnest',261),
-  ('element -> TAG_ATTR avlist START1 content END','element',5,'p_element_attr1','./xnest',265),
-  ('element -> TAG_ATTR avlist START2 content END','element',5,'p_element_attr1','./xnest',266),
-  ('element -> TAG_ATTR avlist START3 content END','element',5,'p_element_attr1','./xnest',267),
-  ('element -> TAG_ATTR avlist START4 content END','element',5,'p_element_attr1','./xnest',268),
-  ('element -> TAG START1 END','element',3,'p_element0','./xnest',272),
-  ('element -> TAG START2 END','element',3,'p_element0','./xnest',273),
-  ('element -> TAG START3 END','element',3,'p_element0','./xnest',274),
-  ('element -> TAG START4 END','element',3,'p_element0','./xnest',275),
-  ('element -> TAG START5 END','element',3,'p_element0','./xnest',276),
-  ('element -> TAG START1 content END','element',4,'p_element1','./xnest',280),
-  ('element -> TAG START2 content END','element',4,'p_element1','./xnest',281),
-  ('element -> TAG START3 content END','element',4,'p_element1','./xnest',282),
-  ('element -> TAG START4 content END','element',4,'p_element1','./xnest',283),
-  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','./xnest',287),
-  ('avlist -> attrvalue','avlist',1,'p_avlist0','./xnest',291),
-  ('attrvalue -> ATTR_EQ VALUE','attrvalue',2,'p_attrvalue','./xnest',295),
-  ('content -> content element','content',2,'p_content','./xnest',299),
-  ('content -> content cdata','content',2,'p_content','./xnest',300),
-  ('content -> element','content',1,'p_content0','./xnest',304),
-  ('content -> cdata','content',1,'p_content0','./xnest',305),
-  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest',309),
-  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest',310),
-  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest',314),
-  ('cdata -> ESCAPED','cdata',1,'p_cdata0','./xnest',315),
+  ("S' -> content","S'",1,None,None,None),
+  ('content -> content element','content',2,'p_content','./xnest',263),
+  ('content -> content cdata','content',2,'p_content','./xnest',264),
+  ('content -> content comment','content',2,'p_content','./xnest',265),
+  ('content -> element','content',1,'p_content0','./xnest',269),
+  ('content -> cdata','content',1,'p_content0','./xnest',270),
+  ('content -> comment','content',1,'p_content0','./xnest',271),
+  ('element -> TAG_ATTR avlist START1 content END','element',5,'p_element_attr1','./xnest',275),
+  ('element -> TAG_ATTR avlist START2 content END','element',5,'p_element_attr1','./xnest',276),
+  ('element -> TAG_ATTR avlist START3 content END','element',5,'p_element_attr1','./xnest',277),
+  ('element -> TAG_ATTR avlist START4 content END','element',5,'p_element_attr1','./xnest',278),
+  ('element -> TAG_ATTR avlist START1 END','element',4,'p_element_attr0','./xnest',282),
+  ('element -> TAG_ATTR avlist START2 END','element',4,'p_element_attr0','./xnest',283),
+  ('element -> TAG_ATTR avlist START3 END','element',4,'p_element_attr0','./xnest',284),
+  ('element -> TAG_ATTR avlist START4 END','element',4,'p_element_attr0','./xnest',285),
+  ('element -> TAG_ATTR avlist START5 END','element',4,'p_element_attr0','./xnest',286),
+  ('element -> TAG START1 content END','element',4,'p_element1','./xnest',290),
+  ('element -> TAG START2 content END','element',4,'p_element1','./xnest',291),
+  ('element -> TAG START3 content END','element',4,'p_element1','./xnest',292),
+  ('element -> TAG START4 content END','element',4,'p_element1','./xnest',293),
+  ('element -> TAG START1 END','element',3,'p_element0','./xnest',297),
+  ('element -> TAG START2 END','element',3,'p_element0','./xnest',298),
+  ('element -> TAG START3 END','element',3,'p_element0','./xnest',299),
+  ('element -> TAG START4 END','element',3,'p_element0','./xnest',300),
+  ('element -> TAG START5 END','element',3,'p_element0','./xnest',301),
+  ('comment -> COMMENT START1 content END','comment',4,'p_comment1','./xnest',305),
+  ('comment -> COMMENT START2 content END','comment',4,'p_comment1','./xnest',306),
+  ('comment -> COMMENT START3 content END','comment',4,'p_comment1','./xnest',307),
+  ('comment -> COMMENT START4 content END','comment',4,'p_comment1','./xnest',308),
+  ('comment -> COMMENT START5 content END','comment',4,'p_comment1','./xnest',309),
+  ('comment -> COMMENT START1 END','comment',3,'p_comment0','./xnest',313),
+  ('comment -> COMMENT START2 END','comment',3,'p_comment0','./xnest',314),
+  ('comment -> COMMENT START3 END','comment',3,'p_comment0','./xnest',315),
+  ('comment -> COMMENT START4 END','comment',3,'p_comment0','./xnest',316),
+  ('comment -> COMMENT START5 END','comment',3,'p_comment0','./xnest',317),
+  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','./xnest',321),
+  ('avlist -> attrvalue','avlist',1,'p_avlist0','./xnest',325),
+  ('attrvalue -> ATTR_EQ VALUE','attrvalue',2,'p_attrvalue','./xnest',329),
+  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest',333),
+  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest',334),
+  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest',338),
+  ('cdata -> ESCAPED','cdata',1,'p_cdata0','./xnest',339),
 ]

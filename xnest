@@ -16,7 +16,7 @@ class Lexer(object):
 		('indent','exclusive'),
 	)
 
-	tokens = ("TAG TAG_ATTR ATTR_EQ VALUE " +
+	tokens = ("TAG TAG_ATTR COMMENT ATTR_EQ VALUE " +
 			"START1 START2 START3 START4 START5 END " + 
 			"CDATA ESCAPED WS").split()
 
@@ -72,6 +72,12 @@ class Lexer(object):
 	
 	def t_ANY_ESCAPED(self, t):
 		r'\\\\'
+		return t
+
+	def t_ANY_COMMENT(self, t):
+		r'\\(-|=)+'
+		t.value = ''
+		t.lexer.push_state('body')
 		return t
 
 	def t_ANY_TAG_ATTR(self, t):
@@ -253,6 +259,25 @@ class Parser(object):
 	def parse(self, code, **kwargs):
 		return self.parser.parse(code, lexer=self.lexer, **kwargs)
 
+	def p_content(self, p):
+		'''content : content element
+		           | content cdata
+		           | content comment'''
+		p[0] = p[1] + p[2]
+
+	def p_content0(self, p):
+		'''content : element
+		           | cdata
+		           | comment'''
+		p[0] = p[1]
+
+	def p_element_attr1(self, p):
+		'''element : TAG_ATTR avlist START1 content END
+		           | TAG_ATTR avlist START2 content END
+		           | TAG_ATTR avlist START3 content END
+		           | TAG_ATTR avlist START4 content END'''
+		p[0] = '<%s %s>%s%s</%s>%s' % (p[1], p[2], p[3], p[4], p[1], p[5])
+
 	def p_element_attr0(self, p):
 		'''element : TAG_ATTR avlist START1 END
 		           | TAG_ATTR avlist START2 END
@@ -261,12 +286,12 @@ class Parser(object):
 		           | TAG_ATTR avlist START5 END'''
 		p[0] = '%s<%s %s />%s' % (p[3], p[1], p[2], p[4])
 
-	def p_element_attr1(self, p):
-		'''element : TAG_ATTR avlist START1 content END
-		           | TAG_ATTR avlist START2 content END
-		           | TAG_ATTR avlist START3 content END
-		           | TAG_ATTR avlist START4 content END'''
-		p[0] = '<%s %s>%s%s</%s>%s' % (p[1], p[2], p[3], p[4], p[1], p[5])
+	def p_element1(self, p):
+		'''element : TAG START1 content END
+		           | TAG START2 content END
+		           | TAG START3 content END
+		           | TAG START4 content END'''
+		p[0] = '<%s>%s%s</%s>%s' % (p[1], p[2], p[3], p[1], p[4])
 
 	def p_element0(self, p):
 		'''element : TAG START1 END
@@ -276,12 +301,21 @@ class Parser(object):
 		           | TAG START5 END'''
 		p[0] = '%s<%s />%s' % (p[2], p[1], p[3])
 
-	def p_element1(self, p):
-		'''element : TAG START1 content END
-		           | TAG START2 content END
-		           | TAG START3 content END
-		           | TAG START4 content END'''
-		p[0] = '<%s>%s%s</%s>%s' % (p[1], p[2], p[3], p[1], p[4])
+	def p_comment1(self, p):
+		'''comment : COMMENT START1 content END
+		           | COMMENT START2 content END
+		           | COMMENT START3 content END
+		           | COMMENT START4 content END
+		           | COMMENT START5 content END'''
+		p[0] = ''
+
+	def p_comment0(self, p):
+		'''comment : COMMENT START1 END
+		           | COMMENT START2 END
+		           | COMMENT START3 END
+		           | COMMENT START4 END
+		           | COMMENT START5 END'''
+		p[0] = ''
 
 	def p_avlist(self, p):
 		'avlist : avlist attrvalue'
@@ -294,16 +328,6 @@ class Parser(object):
 	def p_attrvalue(self, p):
 		'attrvalue : ATTR_EQ VALUE'
 		p[0] = p[1] + '=' + p[2]
-
-	def p_content(self, p):
-		'''content : content element
-		           | content cdata'''
-		p[0] = p[1] + p[2]
-
-	def p_content0(self, p):
-		'''content : element
-		           | cdata'''
-		p[0] = p[1]
 
 	def p_cdata(self, p):
 		'''cdata : cdata ESCAPED
