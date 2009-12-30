@@ -1,11 +1,6 @@
-\html<
-
-\head<
-
+\=========================
 \title: NEST Documentation
 \=========================
-
->
 
 \body<
 
@@ -22,7 +17,7 @@
 	NEST can express familiar XML concepts such as elements, tags and attributes.
 	A structural element is introduced by a backslash followed by the tag name;
 	the content of the element follows in enclosing angle brackets, like this:
-	\code <
+	\pre <
 		\\html <
 			Your page goes here.
 		>
@@ -33,22 +28,25 @@
 
 \p:
 	Tag without following brackets takes the next word or element in the same
-	line to be the content, e.g.
+	line to be its content, e.g.
 
-	\code:
+	\pre <
 		This \\strong word has strength, where as \\em this is emphasized. You can
 		also chain the tags as in \\em \\strong <this phrase>.
+	>
 
 \p:
-	Tag followed by a colon takes the rest of the line to be the content, e.g.
+	Tag followed by a colon takes the rest of the line to be its content, e.g.
 
-	\code:
+	\pre <
 		\\title: NEST documentation
+		\\author: Yours truly
+	>
 
 	If there is nothing but white spaces after the colon, the tag takes an
 	indented block to be the content, e.g.
 
-	\code <
+	\pre <
 		\\code:
 			x = 2**64
 			print "x =", x
@@ -58,22 +56,23 @@
 	Attributes are placed between the tag and the content in enclosing square
 	brackets, e.g.
 
-	\code:
-		\\div [id="main" class="long article"] < ... >
+	\pre: \\div [id="main" class="long article"] < ... >
 
 \p:
-	NEST's directives can be escaped with the backslash, for example \\\\tag is a
-	literal \\tag (in contrast, a <tag> in XML is &lt;tag&gt;). Brackets that are
-	not part of any tag are also treated as literals.
+	NEST's directives can be escaped with the backslash, for example \code \\\\tag is a
+	literal \code \\tag (in contrast, a \code <tag> in XML is \code &lt;tag&gt;).
+	Brackets that are not part of any tag are also treated as literals.
 
 \p:
-	NEST allows comments in the form of \\==+ < ... > or \\--+ < ... >, empty
-	comments can be used decoratively to make NEST source code more readable,
-	e.g.
+	NEST allows comments in the form of
+		\code<\\==+ < ... >> or
+		\code<\\--+ < ... >>.
+	Empty comments should be used decoratively to make NEST source code more readable, e.g.
 
-	\code:
+	\pre <
 		\\h2: Introduction
 		\\----------------
+	>
 
 
 \h2: Transformation
@@ -81,19 +80,15 @@
 
 \p:
 	NEST was originally intended to be transformed into XHTML. This task is
-	performed by the program \var xnest.
+	performed by the program \code<n2x>.
 
 \p:
 	Since NEST is a markup language, you can interpret the structured text
 	however you want. You can for example, write DocBook in NEST.
 
 
-\h2: Convention
+\h2: Discussion
 \--------------
-
-\p:
-	The prefered extension for files with NEST markup is ".st", for "structured
-	text".
 
 
 \h2: Q&A
@@ -101,11 +96,10 @@
 
 \div[class=q]: What can be expressed in SGML but not in NEST?
 \div[class=a]:
-	Overlapping tags, e.g.
-	\code <
+	Overlapping tags, e.g. \pre <
 		<foo> spam <bar> inter-mingled with </foo> ham </bar>
 	>
-	I certainly hope this "feature" will not be missed!
+	I certainly hope that this "feature" will not be missed!
 
 \div[class=q]: What's the relation between NEST and XML?
 \div[class=a]:
@@ -124,5 +118,20 @@
 	NEST is a textual markup language, whereas YAML is a data serialization
 	format.
 
->
+\div[class=q]: How do I convert existing XML documents to NEST?
+\div[class=a]:
+	This one-liner will get you started by converting XML documents
+	to bracket-only NEST documents.
+	\pre <
+	sed --regexp-extended \
+	    -e 's!<([^ /]+)>!\\\1<!g' \
+	    -e 's!<([^ /]+)([ \r\n]+([^<>]*))* />!\\\1[\3]<>!g' \
+	    -e 's!<([^ /]+)([ \r\n]+([^<>]*))*>!\\\1[\3]<!g' \
+	    -e 's!</([^ ]+)>!>!g' \
+	    file.xml > file.nest
+	>
+	The script a2n can do this in batch.  Using \code sed means that we cannot
+	convert tag declarations which spread over many lines, but you can always
+	substitute Perl/Python here.
+
 >
