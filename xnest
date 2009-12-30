@@ -71,11 +71,12 @@ class Lexer(object):
 	t_INITIAL_ignore_WS = r'[ \t\r\n]+'
 	
 	def t_ANY_ESCAPED(self, t):
-		r'\\\\'
+		r'\\[\\<>: ]'
+		t.value = t.value[1]
 		return t
 
 	def t_ANY_COMMENT(self, t):
-		r'\\(-|=)+'
+		r'\\(--+|==+)'
 		t.value = ''
 		t.lexer.push_state('body')
 		return t
@@ -305,8 +306,7 @@ class Parser(object):
 		'''comment : COMMENT START1 content END
 		           | COMMENT START2 content END
 		           | COMMENT START3 content END
-		           | COMMENT START4 content END
-		           | COMMENT START5 content END'''
+		           | COMMENT START4 content END'''
 		p[0] = ''
 
 	def p_comment0(self, p):
@@ -319,7 +319,7 @@ class Parser(object):
 
 	def p_avlist(self, p):
 		'avlist : avlist attrvalue'
-		p[0] = p[1] + p[2]
+		p[0] = p[1] + ' ' + p[2]
 
 	def p_avlist0(self, p):
 		'avlist : attrvalue'
