@@ -5,12 +5,18 @@ Read NEST from files given as sys.argv[1:] or stdin, write XML to stdout.
 """
 
 import re
+import sys
+
 import lex, yacc
 
 from xml.sax.saxutils import escape, quoteattr
 
 #________________________________________________________________________
 # Lexer
+
+class LexError(Exception):
+	def __init__(self, msg, pos):
+		self.msg, self.pos = msg, pos
 
 class Lexer(object):
 	states = (
@@ -46,7 +52,7 @@ class Lexer(object):
 		try:
 			idx = self.lvl_stack.index(lvl)
 		except ValueError:
-			raise SyntaxError("Bad indentation at line %s" % self.lexer.lineno)
+			raise LexError("bad indentation", self.lexer.lineno)
 		while self.lexer.lexstate in ('oneword', 'oneline'):
 			self.emit('END')
 			self.lexer.pop_state()
@@ -75,6 +81,7 @@ class Lexer(object):
 		return nexttok()
 
 	t_INITIAL_ignore_WS = r'[ \t\r\n]+'
+	t_INITIAL_CDATA = r'[^\\]'
 	
 	def t_ANY_ESCAPED(self, t):
 		r'\\[\\<> ]'
@@ -101,7 +108,7 @@ class Lexer(object):
 		return t
 
 	def t_ANY_error(self, t):
-		print "Illegal character '%s' at line %s" % (t.value[0], t.lexer.lineno)
+		raise LexError(t.value[0], t.lexer.lineno)
 		t.lexer.skip(1)
 
 	#________________
@@ -242,7 +249,7 @@ class Lexer(object):
 		if lvl == self.lvl_stack[-1]:
 			pass
 		elif lvl > self.lvl_stack[-1]:
-			raise SyntaxError("Bad indentation in line %s" % t.lexer.lineno)
+			raise LexError("bad indentation", t.lexer.lineno)
 		else:
 			self.lvl_stack.pop()
 			t.lexer.pop_state()
@@ -252,6 +259,10 @@ class Lexer(object):
 
 #________________________________________________________________________
 # Parser
+
+class YaccError(Exception):
+	def __init__(self, msg, pos):
+		self.msg, self.pos = msg, pos
 
 class Parser(object):
 	def __init__(self, lexer=None, **kwargs):
@@ -292,7 +303,6 @@ class Parser(object):
 
 	def p_element_attr0(self, p):
 		'''element : TAG_ATTR avlist START1 END
-		           | TAG_ATTR avlist START2 END
 		           | TAG_ATTR avlist START3 END
 		           | TAG_ATTR avlist START4 END
 		           | TAG_ATTR avlist START5 END'''
@@ -307,7 +317,6 @@ class Parser(object):
 
 	def p_element0(self, p):
 		'''element : TAG START1 END
-		           | TAG START2 END
 		           | TAG START3 END
 		           | TAG START4 END
 		           | TAG START5 END'''
@@ -322,7 +331,6 @@ class Parser(object):
 
 	def p_comment0(self, p):
 		'''comment : COMMENT START1 END
-		           | COMMENT START2 END
 		           | COMMENT START3 END
 		           | COMMENT START4 END
 		           | COMMENT START5 END'''
@@ -359,36 +367,55 @@ class Parser(object):
 		'''cdata : CDATA
 		         | ESCAPED'''
 		p[0] = p[1]
+	
+	def p_START2_error(self, p):
+		'''element : TAG START2 END
+		           | TAG_ATTR avlist START2 END
+		           | COMMENT START2 END'''
+		raise YaccError("empty body not allowed in oneline form", p.lineno(1))
+	
+	def p_error(self, t):
+		if t:
+			raise YaccError("token %s" % t.type, t.lexer.lineno)
+		else:
+			raise YaccError("unexpected EOF", '$')
 
 
 #________________________________________________________________________
 # Main
 
 if __name__ == '__main__':
-	lexer = Lexer()
 	import getopt
-	import sys
 	lexonly, debug = False, False
-	opts, files = getopt.getopt(sys.argv[1:], 'ld')
+	opts, args = getopt.getopt(sys.argv[1:], 'ld')
 	for o, v in opts:
 		if o == '-l':
 			lexonly = True
 		elif o == '-d':
 			debug = True
-	if files == []:
-		files = [sys.stdin]
-	if lexonly:
-		for f in files:
-			if f is not sys.stdin:
-				lexer.input(open(f).read())
-			else:
-				lexer.input(f.read())
+	if not args:
+		args = [sys.stdin]
+
+	lexer = Lexer()
+	parser = Parser(lexer=lexer)
+	try:
+		if lexonly:
+			for file in args:
+				if file is not sys.stdin:
+					lexer.input(open(file).read())
+				else:
+					lexer.input(file.read())
 			for t in lexer:
 				print t
-	else:
-		parser = Parser(lexer=lexer)
-		for f in files:
-			if f is not sys.stdin:
-				print parser.parse(open(f).read(), debug=debug)
-			else:
-				print parser.parse(f.read(), debug=debug)
+		else:
+			for file in args:
+				if file is not sys.stdin:
+					print parser.parse(open(file).read(), debug=debug)
+				else:
+					print parser.parse(sys.stdin.read(), debug=debug)
+	except LexError as e:
+		print "%s:%s: illegal character '%s'" % (file.name, e.pos, e.msg)
+		sys.exit(1)
+	except YaccError as e:
+		print "%s:%s: syntax error, %s" % (file.name, e.pos, e.msg)
+		sys.exit(1)
