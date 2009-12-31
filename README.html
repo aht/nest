@@ -1,0 +1,142 @@
+<title>NEST Documentation</title>
+<body>
+
+<h2>Introduction</h2>
+<p>
+	NEST stands for 
+	<em>Notation for Expressing Structured Text</em>. It is a markup
+	language with the same semantics as XML but is designed to be more readable
+	and easier to write by hand.
+	</p>
+
+
+<h2>Syntax</h2>
+<p>
+	NEST can express familiar XML concepts such as elements, tags and attributes.
+	A structural element is introduced by a backslash followed by the tag name;
+	the content of the element follows in enclosing angle brackets, like this:
+	</p>
+<pre> 
+	\html &lt;
+		Your page goes here.
+	&gt;
+</pre>
+
+<p>
+	There are two shortcuts to make NEST more readable and less tangled.
+	</p>
+
+<p>
+	Tag without following brackets takes the next word or element in the same
+	line to be its content, e.g.
+	</p>
+<pre> 
+	This \strong word has strength, where as \em this is emphasized. You can
+	also chain the tags as in \em \strong &lt;this phrase&gt;.
+</pre>
+
+<p>
+	Tag followed by a colon takes the rest of the line to be its content, e.g.
+	</p>
+<pre> 
+	\title: NEST documentation
+	\author: Yours truly
+</pre>
+
+<p>
+	If there is nothing but white spaces after the colon, the tag takes an
+	indented block to be the content, e.g.
+	</p>
+<pre> 
+	\blockquote:
+		Immature poets imitate; mature poets steal; bad poets deface what they
+		take, and good poets make it into something better, or at least something
+		different. — T.S. Eliot, The Sacred Wood
+</pre>
+
+<p>
+	Attributes are placed between the tag and the content in enclosing square
+	brackets, e.g.
+	</p>
+<pre> 
+	\div [id="main" class="long article"] &lt; ... &gt;
+</pre>
+
+<p>
+	NEST's directives can be escaped with the backslash, for example 
+	<code>\\tag</code>is a
+	literal 
+	<code>\tag</code>(in contrast, a 
+	<code>&lt;tag&gt;</code>in XML is 
+	<code>&amp;lt;tag&amp;gt;).</code>Brackets that are not part of any tag are also treated as literals.
+	</p>
+
+<p>
+	NEST allows comments in the form of
+	<code>\==+ &lt; ... </code>&gt; or
+	<code>\--+ &lt; ... </code>&gt;.
+	Empty comments should be used decoratively to make NEST source code more readable, e.g.
+	</p>
+<pre> 
+	\h2: Introduction
+	\----------------
+</pre>
+
+
+<h2>Transformation</h2>
+<p>
+	Since NEST is a markup language, you can interpret the structured text
+	however you want.
+	</p>
+
+<h3>NEST to XML</h3>
+<p>
+	XML is understood everywhere else, and NEST was originally invented to make
+	writing XML easier anyway. The program 
+	<code>n2x</code> performs this
+	transformation.  It is implemented using PLY (Python lex/yacc).
+	</p>
+
+<h3>XML to NEST</h3>
+<p>
+	The converse transformation from XML to NEST is quite easy, as no parser is
+	necessary.  A simple 
+	<code>sed</code>script, provided as x2n, will do.
+	</p>
+<p>
+	Using 
+	<code>sed</code>means that we cannot convert tag declarations spreading over
+	many lines, but you can substitute Perl/Python/lex.
+	</p>
+
+
+<h2>Q&amp;A</h2>
+<div class="q">What can be expressed in SGML but not in NEST?</div>
+<div class="a">
+	Overlapping tags, e.g. 
+	<pre> 
+		&lt;foo&gt; spam &lt;bar&gt; inter-mingled with &lt;/foo&gt; ham &lt;/bar&gt;
+	</pre>I certainly hope that this "feature" will not be missed!
+	</div>
+
+<div class="q">What's the relation between NEST and XML?</div>
+<div class="a">
+	NEST is a markup language with the same semantics as XML. Practically, this
+	means that NEST is an alternative notation for XML.
+	</div>
+
+<div class="q">What's the relation between NEST and HAML?</div>
+<div class="a">
+	NEST is a markup language with the same semantics as XML, whereas HAML is a
+	both a pre-processor for XHTML and a templating engine.  A practical
+	difference is that it is awkward to write text where white space needs to be
+	preserved in HAML.
+	</div>
+
+<div class="q">What's the relation between NEST and YAML?</div>
+<div class="a">
+	NEST is a textual markup language, whereas YAML is a data serialization
+	format.
+	</div>
+
+</body>

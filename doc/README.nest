@@ -4,24 +4,27 @@
 
 \body<
 
+\h2: Introduction
+\================
+
 \p:
-	NEST stands for \em< Notation for Expressing Structured Text >. It is a
-	markup language with the same semantics as XML but is designed to be more
-	readable and easier to write by hand.
+	NEST stands for \em<Notation for Expressing Structured Text>. It is a markup
+	language with the same semantics as XML but is designed to be more readable
+	and easier to write by hand.
 
 
 \h2: Syntax
-\----------
+\==========
 
 \p:
 	NEST can express familiar XML concepts such as elements, tags and attributes.
 	A structural element is introduced by a backslash followed by the tag name;
 	the content of the element follows in enclosing angle brackets, like this:
-	\pre <
-		\\html <
-			Your page goes here.
-		>
-	>
+\pre <
+	\\html <
+		Your page goes here.
+	\>
+>
 
 \p:
 	There are two shortcuts to make NEST more readable and less tangled.
@@ -29,59 +32,57 @@
 \p:
 	Tag without following brackets takes the next word or element in the same
 	line to be its content, e.g.
-
-	\pre <
-		This \\strong word has strength, where as \\em this is emphasized. You can
-		also chain the tags as in \\em \\strong <this phrase>.
-	>
+\pre <
+	This \\strong word has strength, where as \\em this is emphasized. You can
+	also chain the tags as in \\em \\strong <this phrase\>.
+>
 
 \p:
 	Tag followed by a colon takes the rest of the line to be its content, e.g.
+\pre <
+	\\title: NEST documentation
+	\\author: Yours truly
+>
 
-	\pre <
-		\\title: NEST documentation
-		\\author: Yours truly
-	>
-
+\p:
 	If there is nothing but white spaces after the colon, the tag takes an
 	indented block to be the content, e.g.
-
-	\pre <
-		\\code:
-			x = 2**64
-			print "x =", x
-	>
+\pre <
+	\\blockquote:
+		Immature poets imitate; mature poets steal; bad poets deface what they
+		take, and good poets make it into something better, or at least something
+		different. — T.S. Eliot, The Sacred Wood
+>
 
 \p:
 	Attributes are placed between the tag and the content in enclosing square
 	brackets, e.g.
-
-	\pre: \\div [id="main" class="long article"] < ... >
+\pre <
+	\\div [id="main" class="long article"] < ... \>
+>
 
 \p:
 	NEST's directives can be escaped with the backslash, for example \code \\\\tag is a
-	literal \code \\tag (in contrast, a \code <tag> in XML is \code &lt;tag&gt;).
+	literal \code \\tag (in contrast, a \code \<tag\> in XML is \code &lt;tag&gt;).
 	Brackets that are not part of any tag are also treated as literals.
 
 \p:
 	NEST allows comments in the form of
-		\code<\\==+ < ... >> or
-		\code<\\--+ < ... >>.
+	\code<\\==+ < ... >> or
+	\code<\\--+ < ... >>.
 	Empty comments should be used decoratively to make NEST source code more readable, e.g.
-
-	\pre <
-		\\h2: Introduction
-		\\----------------
-	>
+\pre <
+	\\h2: Introduction
+	\\----------------
+>
 
 
 \h2: Transformation
-\------------------
+\==================
 
 \p:
 	Since NEST is a markup language, you can interpret the structured text
 	however you want.
-
 
 \h3: NEST to XML
 \---------------
@@ -90,38 +91,23 @@
 	writing XML easier anyway. The program \code<n2x> performs this
 	transformation.  It is implemented using PLY (Python lex/yacc).
 
-
 \h3: XML to NEST
 \---------------
 \p:
 	The converse transformation from XML to NEST is quite easy, as no parser is
-	necessary.  This \code sed one-liner will get you started:
-	\pre <
-	sed --regexp-extended \
-		-e 's!<([^ </>!?]+)>([^>]+)</\1>$!\\\1: \2!g' \
-		-e 's!<([^ </>!?]+)>!\\\1<!g' \
-		-e 's!<([^ </>!?]+)([ \r\n]+([^<>]+))* +/>!\\\1[\3]<>!g' \
-		-e 's!<([^ </>!?]+)([ \r\n]+([^<>]+))*>!\\\1[\3]<!g' \
-		-e 's!</([^ </>!?]+)>!>!g' \
-	>
-	The first regex transform element that are opened and then closed at the end
-	of the same line to use NEST's oneline form.  The rests transform XML tags to
-	NEST's bracket form: the second regex converts opening tags without
-	attributes, the third converts self-closing tags with attributes, the fourth
-	converts opening tags with attributes, and the fifth convert closing tags.
-\p:	
+	necessary.  A simple \code sed script, provided as x2n, will do.
+\p:
 	Using \code sed means that we cannot convert tag declarations spreading over
 	many lines, but you can substitute Perl/Python/lex.
-\p:
-	The script \code x2n can do this in batch.
+
 
 \h2: Q&A
-\-------
+\=======
 
 \div[class=q]: What can be expressed in SGML but not in NEST?
 \div[class=a]:
 	Overlapping tags, e.g. \pre <
-		<foo> spam <bar> inter-mingled with </foo> ham </bar>
+		<foo\> spam <bar\> inter-mingled with </foo\> ham </bar\>
 	>
 	I certainly hope that this "feature" will not be missed!
 

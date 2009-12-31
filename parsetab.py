@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '.\xd2\xd36\xc5\xa1\xb1\x91\x81\xfb\x9e\x9bh\xf0T\x07'
+_lr_signature = '\x18\xa2a.<\r\xbdc\xf4\xb1Av\x1c\xa6\x9e\xcf'
     
-_lr_action_items = {'COMMENT':([0,1,2,3,5,6,8,10,11,12,13,14,15,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,47,48,49,50,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,],[4,-6,-40,-5,-4,4,-39,-37,-38,4,4,4,4,-3,-2,-1,4,4,4,4,-30,4,-31,4,-29,4,-32,4,-33,-21,4,-22,4,-20,4,-23,4,-24,4,4,4,4,-26,-27,-25,-28,-17,-18,-16,-19,-12,4,-13,4,-11,4,-14,4,-15,-8,-9,-7,-10,]),'END':([1,2,3,5,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,47,48,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,],[-6,-40,-5,-4,-39,-37,-38,28,30,32,34,36,-3,-2,-1,37,39,41,43,45,-30,53,-31,54,-29,55,-32,56,-33,-21,57,-22,58,-20,59,-23,60,-24,61,63,65,67,69,-26,-27,-25,-28,-17,-18,-16,-19,-12,70,-13,71,-11,72,-14,73,-15,-8,-9,-7,-10,]),'CDATA':([0,1,2,3,5,6,8,10,11,12,13,14,15,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,47,48,49,50,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,],[8,-6,-40,11,-4,8,-39,-37,-38,8,8,8,8,-3,11,-1,8,8,8,8,-30,8,-31,8,-29,8,-32,8,-33,-21,8,-22,8,-20,8,-23,8,-24,8,8,8,8,-26,-27,-25,-28,-17,-18,-16,-19,-12,8,-13,8,-11,8,-14,8,-15,-8,-9,-7,-10,]),'START2':([4,7,26,27,46,52,],[12,20,-35,47,-36,-34,]),'START3':([4,7,26,27,46,52,],[13,21,-35,48,-36,-34,]),'START1':([4,7,26,27,46,52,],[14,22,-35,49,-36,-34,]),'ATTR_EQ':([9,26,27,46,52,],[25,-35,25,-36,-34,]),'START4':([4,7,26,27,46,52,],[15,23,-35,50,-36,-34,]),'START5':([4,7,26,27,46,52,],[16,24,-35,51,-36,-34,]),'ESCAPED':([0,1,2,3,5,6,8,10,11,12,13,14,15,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,47,48,49,50,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,],[2,-6,-40,10,-4,2,-39,-37,-38,2,2,2,2,-3,10,-1,2,2,2,2,-30,2,-31,2,-29,2,-32,2,-33,-21,2,-22,2,-20,2,-23,2,-24,2,2,2,2,-26,-27,-25,-28,-17,-18,-16,-19,-12,2,-13,2,-11,2,-14,2,-15,-8,-9,-7,-10,]),'TAG':([0,1,2,3,5,6,8,10,11,12,13,14,15,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,47,48,49,50,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,],[7,-6,-40,-5,-4,7,-39,-37,-38,7,7,7,7,-3,-2,-1,7,7,7,7,-30,7,-31,7,-29,7,-32,7,-33,-21,7,-22,7,-20,7,-23,7,-24,7,7,7,7,-26,-27,-25,-28,-17,-18,-16,-19,-12,7,-13,7,-11,7,-14,7,-15,-8,-9,-7,-10,]),'VALUE':([25,],[46,]),'TAG_ATTR':([0,1,2,3,5,6,8,10,11,12,13,14,15,17,18,19,20,21,22,23,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,47,48,49,50,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,],[9,-6,-40,-5,-4,9,-39,-37,-38,9,9,9,9,-3,-2,-1,9,9,9,9,-30,9,-31,9,-29,9,-32,9,-33,-21,9,-22,9,-20,9,-23,9,-24,9,9,9,9,-26,-27,-25,-28,-17,-18,-16,-19,-12,9,-13,9,-11,9,-14,9,-15,-8,-9,-7,-10,]),'$end':([1,2,3,5,6,8,10,11,17,18,19,28,30,32,34,36,37,39,41,43,45,53,54,55,56,57,58,59,60,61,63,65,67,69,70,71,72,73,],[-6,-40,-5,-4,0,-39,-37,-38,-3,-2,-1,-30,-31,-29,-32,-33,-21,-22,-20,-23,-24,-26,-27,-25,-28,-17,-18,-16,-19,-12,-13,-11,-14,-15,-8,-9,-7,-10,]),}
+_lr_action_items = {'COMMENT':([0,1,2,3,6,7,9,10,11,12,13,14,15,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,36,40,41,42,43,46,47,48,49,50,51,52,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,],[4,-6,-44,-4,-5,4,-43,-41,-42,4,4,4,4,-2,-3,-1,4,4,4,4,-30,4,-31,4,-29,4,-32,4,-33,4,4,4,4,-21,4,-22,4,-20,4,-23,4,-24,-26,-27,-25,-28,-12,4,-13,4,-11,4,-14,4,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),'END':([1,2,3,6,9,10,11,12,13,14,15,16,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,40,41,42,43,44,46,47,48,49,50,51,52,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,],[-6,-44,-4,-5,-43,-41,-42,28,30,32,34,36,-2,-3,-1,46,48,50,52,54,-30,55,-31,56,-29,57,-32,58,-33,61,63,65,67,69,-21,70,-22,71,-20,72,-23,73,-24,-26,-27,-25,-28,-12,74,-13,75,-11,76,-14,77,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),'TAG_ATTR':([0,1,2,3,6,7,9,10,11,12,13,14,15,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,36,40,41,42,43,46,47,48,49,50,51,52,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,],[5,-6,-44,-4,-5,5,-43,-41,-42,5,5,5,5,-2,-3,-1,5,5,5,5,-30,5,-31,5,-29,5,-32,5,-33,5,5,5,5,-21,5,-22,5,-20,5,-23,5,-24,-26,-27,-25,-28,-12,5,-13,5,-11,5,-14,5,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),'START2':([4,8,18,19,37,38,39,45,59,60,],[12,23,-35,40,-39,-40,-36,-34,-37,-38,]),'START3':([4,8,18,19,37,38,39,45,59,60,],[13,24,-35,41,-39,-40,-36,-34,-37,-38,]),'START1':([4,8,18,19,37,38,39,45,59,60,],[14,25,-35,42,-39,-40,-36,-34,-37,-38,]),'ATTR_EQ':([5,18,19,37,38,39,45,59,60,],[17,-35,17,-39,-40,-36,-34,-37,-38,]),'START4':([4,8,18,19,37,38,39,45,59,60,],[15,26,-35,43,-39,-40,-36,-34,-37,-38,]),'START5':([4,8,18,19,37,38,39,45,59,60,],[16,27,-35,44,-39,-40,-36,-34,-37,-38,]),'ESCAPED':([0,1,2,3,6,7,9,10,11,12,13,14,15,17,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,],[2,-6,-44,10,-5,2,-43,-41,-42,2,2,2,2,38,-2,10,-1,2,2,2,2,-30,2,-31,2,-29,2,-32,2,-33,-39,-40,60,2,2,2,2,-21,2,-22,2,-20,2,-23,2,-24,-26,-27,-25,-28,-37,-38,-12,2,-13,2,-11,2,-14,2,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),'TAG':([0,1,2,3,6,7,9,10,11,12,13,14,15,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,36,40,41,42,43,46,47,48,49,50,51,52,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,],[8,-6,-44,-4,-5,8,-43,-41,-42,8,8,8,8,-2,-3,-1,8,8,8,8,-30,8,-31,8,-29,8,-32,8,-33,8,8,8,8,-21,8,-22,8,-20,8,-23,8,-24,-26,-27,-25,-28,-12,8,-13,8,-11,8,-14,8,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),'VALUE':([17,37,38,39,59,60,],[37,-39,-40,59,-37,-38,]),'CDATA':([0,1,2,3,6,7,9,10,11,12,13,14,15,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,36,40,41,42,43,46,47,48,49,50,51,52,53,54,55,56,57,58,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,],[9,-6,-44,11,-5,9,-43,-41,-42,9,9,9,9,-2,11,-1,9,9,9,9,-30,9,-31,9,-29,9,-32,9,-33,9,9,9,9,-21,9,-22,9,-20,9,-23,9,-24,-26,-27,-25,-28,-12,9,-13,9,-11,9,-14,9,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),'$end':([1,2,3,6,7,9,10,11,20,21,22,28,30,32,34,36,46,48,50,52,54,55,56,57,58,61,63,65,67,69,70,71,72,73,74,75,76,77,],[-6,-44,-4,-5,0,-43,-41,-42,-2,-3,-1,-30,-31,-29,-32,-33,-21,-22,-20,-23,-24,-26,-27,-25,-28,-12,-13,-11,-14,-15,-17,-18,-16,-19,-8,-9,-7,-10,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'comment':([0,6,12,13,14,15,20,21,22,23,29,31,33,35,38,40,42,44,47,48,49,50,62,64,66,68,],[1,17,1,1,1,1,1,1,1,1,17,17,17,17,17,17,17,17,1,1,1,1,17,17,17,17,]),'attrvalue':([9,27,],[26,52,]),'element':([0,6,12,13,14,15,20,21,22,23,29,31,33,35,38,40,42,44,47,48,49,50,62,64,66,68,],[5,19,5,5,5,5,5,5,5,5,19,19,19,19,19,19,19,19,5,5,5,5,19,19,19,19,]),'content':([0,12,13,14,15,20,21,22,23,47,48,49,50,],[6,29,31,33,35,38,40,42,44,62,64,66,68,]),'cdata':([0,6,12,13,14,15,20,21,22,23,29,31,33,35,38,40,42,44,47,48,49,50,62,64,66,68,],[3,18,3,3,3,3,3,3,3,3,18,18,18,18,18,18,18,18,3,3,3,3,18,18,18,18,]),'avlist':([9,],[27,]),}
+_lr_goto_items = {'comment':([0,7,12,13,14,15,23,24,25,26,29,31,33,35,40,41,42,43,47,49,51,53,62,64,66,68,],[1,20,1,1,1,1,1,1,1,1,20,20,20,20,1,1,1,1,20,20,20,20,20,20,20,20,]),'attrvalue':([5,19,],[18,45,]),'value':([17,],[39,]),'element':([0,7,12,13,14,15,23,24,25,26,29,31,33,35,40,41,42,43,47,49,51,53,62,64,66,68,],[6,22,6,6,6,6,6,6,6,6,22,22,22,22,6,6,6,6,22,22,22,22,22,22,22,22,]),'content':([0,12,13,14,15,23,24,25,26,40,41,42,43,],[7,29,31,33,35,47,49,51,53,62,64,66,68,]),'cdata':([0,7,12,13,14,15,23,24,25,26,29,31,33,35,40,41,42,43,47,49,51,53,62,64,66,68,],[3,21,3,3,3,3,3,3,3,3,21,21,21,21,3,3,3,3,21,21,21,21,21,21,21,21,]),'avlist':([5,],[19,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,44 +26,48 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> content","S'",1,None,None,None),
-  ('content -> content element','content',2,'p_content','./xnest',263),
-  ('content -> content cdata','content',2,'p_content','./xnest',264),
-  ('content -> content comment','content',2,'p_content','./xnest',265),
-  ('content -> element','content',1,'p_content0','./xnest',269),
-  ('content -> cdata','content',1,'p_content0','./xnest',270),
-  ('content -> comment','content',1,'p_content0','./xnest',271),
-  ('element -> TAG_ATTR avlist START1 content END','element',5,'p_element_attr1','./xnest',275),
-  ('element -> TAG_ATTR avlist START2 content END','element',5,'p_element_attr1','./xnest',276),
-  ('element -> TAG_ATTR avlist START3 content END','element',5,'p_element_attr1','./xnest',277),
-  ('element -> TAG_ATTR avlist START4 content END','element',5,'p_element_attr1','./xnest',278),
-  ('element -> TAG_ATTR avlist START1 END','element',4,'p_element_attr0','./xnest',282),
-  ('element -> TAG_ATTR avlist START2 END','element',4,'p_element_attr0','./xnest',283),
-  ('element -> TAG_ATTR avlist START3 END','element',4,'p_element_attr0','./xnest',284),
-  ('element -> TAG_ATTR avlist START4 END','element',4,'p_element_attr0','./xnest',285),
-  ('element -> TAG_ATTR avlist START5 END','element',4,'p_element_attr0','./xnest',286),
-  ('element -> TAG START1 content END','element',4,'p_element1','./xnest',290),
-  ('element -> TAG START2 content END','element',4,'p_element1','./xnest',291),
-  ('element -> TAG START3 content END','element',4,'p_element1','./xnest',292),
-  ('element -> TAG START4 content END','element',4,'p_element1','./xnest',293),
-  ('element -> TAG START1 END','element',3,'p_element0','./xnest',297),
-  ('element -> TAG START2 END','element',3,'p_element0','./xnest',298),
-  ('element -> TAG START3 END','element',3,'p_element0','./xnest',299),
-  ('element -> TAG START4 END','element',3,'p_element0','./xnest',300),
-  ('element -> TAG START5 END','element',3,'p_element0','./xnest',301),
-  ('comment -> COMMENT START1 content END','comment',4,'p_comment1','./xnest',305),
-  ('comment -> COMMENT START2 content END','comment',4,'p_comment1','./xnest',306),
-  ('comment -> COMMENT START3 content END','comment',4,'p_comment1','./xnest',307),
-  ('comment -> COMMENT START4 content END','comment',4,'p_comment1','./xnest',308),
-  ('comment -> COMMENT START1 END','comment',3,'p_comment0','./xnest',312),
-  ('comment -> COMMENT START2 END','comment',3,'p_comment0','./xnest',313),
-  ('comment -> COMMENT START3 END','comment',3,'p_comment0','./xnest',314),
-  ('comment -> COMMENT START4 END','comment',3,'p_comment0','./xnest',315),
-  ('comment -> COMMENT START5 END','comment',3,'p_comment0','./xnest',316),
-  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','./xnest',320),
-  ('avlist -> attrvalue','avlist',1,'p_avlist0','./xnest',324),
-  ('attrvalue -> ATTR_EQ VALUE','attrvalue',2,'p_attrvalue','./xnest',328),
-  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','./xnest',332),
-  ('cdata -> cdata CDATA','cdata',2,'p_cdata','./xnest',333),
-  ('cdata -> CDATA','cdata',1,'p_cdata0','./xnest',337),
-  ('cdata -> ESCAPED','cdata',1,'p_cdata0','./xnest',338),
+  ('content -> content element','content',2,'p_content11','/home/aht/bin/n2x',269),
+  ('content -> content comment','content',2,'p_content11','/home/aht/bin/n2x',270),
+  ('content -> content cdata','content',2,'p_content10','/home/aht/bin/n2x',274),
+  ('content -> cdata','content',1,'p_content00','/home/aht/bin/n2x',278),
+  ('content -> element','content',1,'p_content01','/home/aht/bin/n2x',282),
+  ('content -> comment','content',1,'p_content01','/home/aht/bin/n2x',283),
+  ('element -> TAG_ATTR avlist START1 content END','element',5,'p_element_attr1','/home/aht/bin/n2x',287),
+  ('element -> TAG_ATTR avlist START2 content END','element',5,'p_element_attr1','/home/aht/bin/n2x',288),
+  ('element -> TAG_ATTR avlist START3 content END','element',5,'p_element_attr1','/home/aht/bin/n2x',289),
+  ('element -> TAG_ATTR avlist START4 content END','element',5,'p_element_attr1','/home/aht/bin/n2x',290),
+  ('element -> TAG_ATTR avlist START1 END','element',4,'p_element_attr0','/home/aht/bin/n2x',294),
+  ('element -> TAG_ATTR avlist START2 END','element',4,'p_element_attr0','/home/aht/bin/n2x',295),
+  ('element -> TAG_ATTR avlist START3 END','element',4,'p_element_attr0','/home/aht/bin/n2x',296),
+  ('element -> TAG_ATTR avlist START4 END','element',4,'p_element_attr0','/home/aht/bin/n2x',297),
+  ('element -> TAG_ATTR avlist START5 END','element',4,'p_element_attr0','/home/aht/bin/n2x',298),
+  ('element -> TAG START1 content END','element',4,'p_element1','/home/aht/bin/n2x',302),
+  ('element -> TAG START2 content END','element',4,'p_element1','/home/aht/bin/n2x',303),
+  ('element -> TAG START3 content END','element',4,'p_element1','/home/aht/bin/n2x',304),
+  ('element -> TAG START4 content END','element',4,'p_element1','/home/aht/bin/n2x',305),
+  ('element -> TAG START1 END','element',3,'p_element0','/home/aht/bin/n2x',309),
+  ('element -> TAG START2 END','element',3,'p_element0','/home/aht/bin/n2x',310),
+  ('element -> TAG START3 END','element',3,'p_element0','/home/aht/bin/n2x',311),
+  ('element -> TAG START4 END','element',3,'p_element0','/home/aht/bin/n2x',312),
+  ('element -> TAG START5 END','element',3,'p_element0','/home/aht/bin/n2x',313),
+  ('comment -> COMMENT START1 content END','comment',4,'p_comment1','/home/aht/bin/n2x',317),
+  ('comment -> COMMENT START2 content END','comment',4,'p_comment1','/home/aht/bin/n2x',318),
+  ('comment -> COMMENT START3 content END','comment',4,'p_comment1','/home/aht/bin/n2x',319),
+  ('comment -> COMMENT START4 content END','comment',4,'p_comment1','/home/aht/bin/n2x',320),
+  ('comment -> COMMENT START1 END','comment',3,'p_comment0','/home/aht/bin/n2x',324),
+  ('comment -> COMMENT START2 END','comment',3,'p_comment0','/home/aht/bin/n2x',325),
+  ('comment -> COMMENT START3 END','comment',3,'p_comment0','/home/aht/bin/n2x',326),
+  ('comment -> COMMENT START4 END','comment',3,'p_comment0','/home/aht/bin/n2x',327),
+  ('comment -> COMMENT START5 END','comment',3,'p_comment0','/home/aht/bin/n2x',328),
+  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','/home/aht/bin/n2x',332),
+  ('avlist -> attrvalue','avlist',1,'p_avlist0','/home/aht/bin/n2x',336),
+  ('attrvalue -> ATTR_EQ value','attrvalue',2,'p_attrvalue','/home/aht/bin/n2x',340),
+  ('value -> value VALUE','value',2,'p_value','/home/aht/bin/n2x',344),
+  ('value -> value ESCAPED','value',2,'p_value','/home/aht/bin/n2x',345),
+  ('value -> VALUE','value',1,'p_value0','/home/aht/bin/n2x',349),
+  ('value -> ESCAPED','value',1,'p_value0','/home/aht/bin/n2x',350),
+  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','/home/aht/bin/n2x',354),
+  ('cdata -> cdata CDATA','cdata',2,'p_cdata','/home/aht/bin/n2x',355),
+  ('cdata -> CDATA','cdata',1,'p_cdata0','/home/aht/bin/n2x',359),
+  ('cdata -> ESCAPED','cdata',1,'p_cdata0','/home/aht/bin/n2x',360),
 ]

@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 """
-Read NEST from sys.stdin, write XML to stdout.
+Read NEST from files given as sys.argv[1:] or stdin, write XML to stdout.
 """
 
 import re
 import lex, yacc
+
+from xml.sax.saxutils import escape, quoteattr
 
 #________________________________________________________________________
 # Lexer
@@ -44,7 +46,7 @@ class Lexer(object):
 		try:
 			idx = self.lvl_stack.index(lvl)
 		except ValueError:
-			raise SyntaxError("Bad indentation in line %s" % self.lexer.lineno)
+			raise SyntaxError("Bad indentation at line %s" % self.lexer.lineno)
 		while self.lexer.lexstate in ('oneword', 'oneline'):
 			self.emit('END')
 			self.lexer.pop_state()
@@ -75,7 +77,7 @@ class Lexer(object):
 	t_INITIAL_ignore_WS = r'[ \t\r\n]+'
 	
 	def t_ANY_ESCAPED(self, t):
-		r'\\[\\<>: ]'
+		r'\\[\\<> ]'
 		t.value = t.value[1]
 		return t
 
@@ -99,7 +101,7 @@ class Lexer(object):
 		return t
 
 	def t_ANY_error(self, t):
-		print "Illegal character '%s' in line %s" % (t.value[0], t.lexer.lineno)
+		print "Illegal character '%s' at line %s" % (t.value[0], t.lexer.lineno)
 		t.lexer.skip(1)
 
 	#________________
@@ -108,12 +110,12 @@ class Lexer(object):
 	t_attr_ignore_WS = r'[ \t\r\n]+'
 
 	def t_attr_ATTR_EQ(self, t):
-		r'[^\=\] \t\n\r]+='
-		t.value = t.value[:-1]
+		r'[^\=\]]+[ \t\n\r]*='
+		t.value = t.value[:-1].rstrip()
 		return t
 
 	def t_attr_VALUE(self, t):
-		r'(\'.*\')|(".*")|[^= \t\r\n\]]+'
+		r'(\'.*\')|(".*")|[^= \\\t\r\n\]]+'
 		return t
 
 	def t_attr_END_ATTR(self, t):
@@ -260,18 +262,24 @@ class Parser(object):
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self, **kwargs)
 
-	def parse(self, code, **kwargs):
-		return self.parser.parse(code, lexer=self.lexer, **kwargs)
+	def parse(self, input, **kwargs):
+		return self.parser.parse(input, lexer=self.lexer, **kwargs)
 
-	def p_content(self, p):
+	def p_content11(self, p):
 		'''content : content element
-		           | content cdata
 		           | content comment'''
 		p[0] = p[1] + p[2]
+	
+	def p_content10(self, p):
+		'''content : content cdata'''
+		p[0] = p[1] + escape(p[2])
 
-	def p_content0(self, p):
+	def p_content00(self, p):
+		'''content : cdata'''
+		p[0] = escape(p[1])
+
+	def p_content01(self, p):
 		'''content : element
-		           | cdata
 		           | comment'''
 		p[0] = p[1]
 
@@ -329,14 +337,24 @@ class Parser(object):
 		p[0] = p[1]
 
 	def p_attrvalue(self, p):
-		'attrvalue : ATTR_EQ VALUE'
-		p[0] = p[1] + '=' + p[2]
+		'attrvalue : ATTR_EQ value'
+		p[0] = p[1] + '=' + quoteattr(p[2])
+	
+	def p_value(self, p):
+		'''value : value VALUE
+		         | value ESCAPED'''
+		p[0] = p[1] + p[2]
+	
+	def p_value0(self, p):
+		'''value : VALUE
+		         | ESCAPED'''
+		p[0] = p[1]
 
 	def p_cdata(self, p):
 		'''cdata : cdata ESCAPED
 		         | cdata CDATA'''
 		p[0] = p[1] + p[2]
-
+		
 	def p_cdata0(self, p):
 		'''cdata : CDATA
 		         | ESCAPED'''
@@ -351,16 +369,26 @@ if __name__ == '__main__':
 	import getopt
 	import sys
 	lexonly, debug = False, False
-	opts, args = getopt.getopt(sys.argv[1:], 'ld')
+	opts, files = getopt.getopt(sys.argv[1:], 'ld')
 	for o, v in opts:
 		if o == '-l':
 			lexonly = True
 		elif o == '-d':
 			debug = True
+	if files == []:
+		files = [sys.stdin]
 	if lexonly:
-		lexer.input(sys.stdin.read())
-		for t in lexer:
-			print t
+		for f in files:
+			if f is not sys.stdin:
+				lexer.input(open(f).read())
+			else:
+				lexer.input(f.read())
+			for t in lexer:
+				print t
 	else:
 		parser = Parser(lexer=lexer)
-		print parser.parse(sys.stdin.read(), debug=debug)
+		for f in files:
+			if f is not sys.stdin:
+				print parser.parse(open(f).read(), debug=debug)
+			else:
+				print parser.parse(f.read(), debug=debug)

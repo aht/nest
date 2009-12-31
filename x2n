@@ -9,6 +9,14 @@ change_ext () {
 	esac
 }
 
+#	The first regex transform element that are opened and then closed at the end
+#	of the same line to use NEST's oneline form.
+
+#	The rests transform XML tags to NEST's bracket form: the second regex
+#	converts opening tags without attributes, the third converts self-closing
+#	tags with attributes, the fourth converts opening tags with attributes, and
+#	the fifth convert closing tags.
+
 for file in "$@"; do
 sed --regexp-extended \
 	-e 's!<([^ </>!?]+)>([^>]+)</\1>$!\\\1: \2!g' \
