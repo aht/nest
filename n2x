@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Read NEST from sys.stdin, write XML to stdout.
+"""
+
 import re
 import lex, yacc
 
@@ -77,26 +81,25 @@ class Lexer(object):
 
 	def t_ANY_COMMENT(self, t):
 		r'\\(--+|==+)'
-		t.value = ''
 		t.lexer.push_state('body')
+		t.value = ''
 		return t
 
 	def t_ANY_TAG_ATTR(self, t):
 		r'\\[^ \t\r\n\[\]<>:]+[ \t\r\n]*\['
-		t.value = t.value[1:]
 		t.lexer.push_state('attr')
 		t.lexer.lineno += t.value.count('\n')
-		t.value = t.value[:-1]
+		t.value = t.value[1:-1]
 		return t
 
 	def t_ANY_TAG(self, t):
 		r'\\[^ \t\r\n\[\]<>:]+'
-		t.value = t.value[1:]
 		t.lexer.push_state('body')
+		t.value = t.value[1:]
 		return t
 
 	def t_ANY_error(self, t):
-		print "Illegal character '%s'" % t.value[0]
+		print "Illegal character '%s' in line %s" % (t.value[0], t.lexer.lineno)
 		t.lexer.skip(1)
 
 	#________________
@@ -124,15 +127,15 @@ class Lexer(object):
 
 	def t_body_START1(self, t):
 		r':[\r\n]+[\t]+'
+		t.lexer.pop_state()
+		t.lexer.push_state('indent')
 		lvl = t.value.count('\t')
 		if lvl <= self.lvl_stack[-1]:
 			self.emit_ENDs(lvl)
 		else:
 			self.lvl_stack.append(lvl)
-		t.lexer.pop_state()
-		t.lexer.push_state('indent')
-		t.value = t.value[1:]
 		t.lexer.lineno += t.value.count('\n')
+		t.value = t.value[1:]
 		return t
 
 	def t_body_START2(self, t):
