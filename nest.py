@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 
 """
-Read NEST from files given as sys.argv[1:] or stdin, write XML to stdout.
+Parsers for NEST (Notation for Expressing Structrured Text)
+
+etree -- parse a NEST string and return an ElementTree
+xml -- parse a NEST string and return an XML string
 """
 
-import re
-import sys
+__version__ = '0.0.1'
 
+import re
 import lex, yacc
 
 from xml.sax.saxutils import escape, quoteattr
+from xml.etree.ElementTree import ElementTree, Element, Comment
+
 
 #________________________________________________________________________
 # Lexer
@@ -17,6 +22,8 @@ from xml.sax.saxutils import escape, quoteattr
 class LexError(Exception):
 	def __init__(self, msg, pos):
 		self.msg, self.pos = msg, pos
+	def __str__(self):
+		return '%s at line %s' % (self.msg, self.pos)
 
 class Lexer(object):
 	states = (
@@ -52,7 +59,7 @@ class Lexer(object):
 		try:
 			idx = self.lvl_stack.index(lvl)
 		except ValueError:
-			raise LexError("bad indentation", self.lexer.lineno)
+			raise LexError("bad indentation", self.lex.lineno)
 		while self.lexer.lexstate in ('oneword', 'oneline'):
 			self.emit('END')
 			self.lexer.pop_state()
@@ -80,7 +87,6 @@ class Lexer(object):
 					yield t
 		return nexttok()
 
-	t_INITIAL_ignore_WS = r'[ \t\r\n]+'
 	t_INITIAL_CDATA = r'[^\\]'
 	
 	def t_ANY_ESCAPED(self, t):
@@ -117,7 +123,7 @@ class Lexer(object):
 	t_attr_ignore_WS = r'[ \t\r\n]+'
 
 	def t_attr_ATTR_EQ(self, t):
-		r'[^\=\]]+[ \t\n\r]*='
+		r'[^ \=\]]+[ \t\n\r]*='
 		t.value = t.value[:-1].rstrip()
 		return t
 
@@ -256,15 +262,22 @@ class Lexer(object):
 			self.emit_ENDs(lvl)
 			return t
 
+from table import lextab
+
+lexer = Lexer(lextab=lextab, optimize=1)
+
 
 #________________________________________________________________________
-# Parser
+# Parsers
 
 class YaccError(Exception):
 	def __init__(self, msg, pos):
 		self.msg, self.pos = msg, pos
+	def __str__(self):
+		return '%s at line %s' % (self.msg, self.pos)
 
-class Parser(object):
+
+class XMLBuilder(object):
 	def __init__(self, lexer=None, **kwargs):
 		if lexer:
 			self.lexer = lexer
@@ -376,46 +389,158 @@ class Parser(object):
 	
 	def p_error(self, t):
 		if t:
-			raise YaccError("token %s" % t.type, t.lexer.lineno)
+			raise YaccError("token %s" % t.type, t.lineno)
 		else:
 			raise YaccError("unexpected EOF", '$')
 
 
-#________________________________________________________________________
-# Main
+from table import xmlbuilder
 
-if __name__ == '__main__':
-	import getopt
-	lexonly, debug = False, False
-	opts, args = getopt.getopt(sys.argv[1:], 'ld')
-	for o, v in opts:
-		if o == '-l':
-			lexonly = True
-		elif o == '-d':
-			debug = True
-	if not args:
-		args = [sys.stdin]
+xml = XMLBuilder(lexer=lexer,
+		tabmodule=xmlbuilder,
+		optimize=1,
+	).parse
 
-	lexer = Lexer()
-	parser = Parser(lexer=lexer)
-	try:
-		if lexonly:
-			for file in args:
-				if file is not sys.stdin:
-					lexer.input(open(file).read())
-				else:
-					lexer.input(file.read())
-			for t in lexer:
-				print t
+
+class EtreeBuilder(object):
+	def __init__(self, lexer=None, **kwargs):
+		if lexer:
+			self.lexer = lexer
 		else:
-			for file in args:
-				if file is not sys.stdin:
-					print parser.parse(open(file).read(), debug=debug)
+			self.lexer = Lexer()
+		self.tokens = self.lexer.tokens
+		self.parser = yacc.yacc(module=self, **kwargs)
+
+	def parse(self, input, **kwargs):
+		e = self.parser.parse(input, lexer=self.lexer, **kwargs)
+		return ElementTree(e)
+
+	def p_element_attr1(self, p):
+		'''element : TAG_ATTR avlist START1 content END
+		           | TAG_ATTR avlist START2 content END
+		           | TAG_ATTR avlist START3 content END
+		           | TAG_ATTR avlist START4 content END'''
+		p[0] = Element(p[1], **dict(p[2]))
+		for i, e in enumerate(p[4]):
+			if isinstance(e, basestring):
+				if i == 0:
+					p[0].text = e
 				else:
-					print parser.parse(sys.stdin.read(), debug=debug)
-	except LexError as e:
-		print "%s:%s: illegal character '%s'" % (file.name, e.pos, e.msg)
-		sys.exit(1)
-	except YaccError as e:
-		print "%s:%s: syntax error, %s" % (file.name, e.pos, e.msg)
-		sys.exit(1)
+					last.tail = e
+			else:
+				p[0].append(e)
+				last = e
+
+	def p_element_attr0(self, p):
+		'''element : TAG_ATTR avlist START1 END
+		           | TAG_ATTR avlist START3 END
+		           | TAG_ATTR avlist START4 END
+		           | TAG_ATTR avlist START5 END'''
+		p[0] = Element(p[1], **dict(p[2]))
+
+	def p_element1(self, p):
+		'''element : TAG START1 content END
+		           | TAG START2 content END
+		           | TAG START3 content END
+		           | TAG START4 content END'''
+		p[0] = Element(p[1])
+		for i, e in enumerate(p[3]):
+			if isinstance(e, basestring):
+				if i == 0:
+					p[0].text = e
+				else:
+					last.tail = e
+			else:
+				p[0].append(e)
+				last = e
+
+	def p_element0(self, p):
+		'''element : TAG START1 END
+		           | TAG START3 END
+		           | TAG START4 END
+		           | TAG START5 END'''
+		p[0] = Element(p[1])
+
+	def p_comment1(self, p):
+		'''comment : COMMENT START1 content END
+		           | COMMENT START2 content END
+		           | COMMENT START3 content END
+		           | COMMENT START4 content END'''
+		p[0] = Comment(p[3])
+
+	def p_comment0(self, p):
+		'''comment : COMMENT START1 END
+		           | COMMENT START3 END
+		           | COMMENT START4 END
+		           | COMMENT START5 END'''
+		p[0] = Comment()
+
+	def p_content11(self, p):
+		'''content : content element
+		           | content comment'''
+		p[1].append(p[2])
+		p[0] = p[1]
+
+	def p_content10(self, p):
+		'''content : content cdata'''
+		# p[1][-1] must be an element
+		p[1][-1].tail = p[2]
+		p[0] = p[1]
+
+	def p_content0(self, p):
+		'''content : element
+		           | comment
+		           | cdata'''
+		p[0] = [p[1]]
+
+	def p_avlist(self, p):
+		'avlist : avlist attrvalue'
+		p[0] = p[1].append(p[2])
+
+	def p_avlist0(self, p):
+		'avlist : attrvalue'
+		p[0] = [p[1]]
+
+	def p_attrvalue(self, p):
+		'attrvalue : ATTR_EQ value'
+		p[0] = p[1], p[2]
+
+	def p_value(self, p):
+		'''value : value VALUE
+		         | value ESCAPED'''
+		p[0] = p[1] + p[2]
+
+	def p_value0(self, p):
+		'''value : VALUE
+		         | ESCAPED'''
+		p[0] = p[1]
+
+	def p_cdata(self, p):
+		'''cdata : cdata ESCAPED
+		         | cdata CDATA'''
+		p[0] = p[1] + p[2]
+
+	def p_cdata0(self, p):
+		'''cdata : CDATA
+		         | ESCAPED'''
+		p[0] = p[1]
+
+	def p_START2_error(self, p):
+		'''element : TAG START2 END
+		           | TAG_ATTR avlist START2 END
+		           | COMMENT START2 END'''
+		raise YaccError("empty body not allowed in oneline form", p.lineno(1))
+
+	def p_error(self, t):
+		if t:
+			raise YaccError("token %s" % t.type, t.lineno)
+		else:
+			raise YaccError("unexpected EOF", '$')
+
+
+from table import etreebuilder
+
+etree = EtreeBuilder(lexer=lexer,
+		tabmodule=etreebuilder,
+		optimize=1
+	).parse

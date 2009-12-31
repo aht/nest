@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+"""
+Read NEST from files given as sys.argv[1:] or stdin, write XML to stdout.
+"""
+
+import getopt, os, sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from nest import Lexer, xml, LexError, YaccError
+
+
+lexonly = False
+debug = False
+
+if __name__ == '__main__':
+	opts, args = getopt.getopt(sys.argv[1:], 'ld')
+	for o, v in opts:
+		if o == '-l':
+			lexonly = True
+		elif o == '-d':
+			debug = True
+	if not args:
+		args = [sys.stdin]
+
+	lexer = Lexer()
+	try:
+		if lexonly:
+			for file in args:
+				if file is not sys.stdin:
+					lexer.input(open(file).read())
+				else:
+					lexer.input(file.read())
+			for t in lexer:
+				print t
+		else:
+			for file in args:
+				if file is not sys.stdin:
+					print xml(open(file).read(), debug=debug)
+				else:
+					print xml(sys.stdin.read(), debug=debug)
+	except LexError as e:
+		print "%s:%s: illegal character '%s'" % (file.name, e.pos, e.msg)
+		sys.exit(1)
+	except YaccError as e:
+		print "%s:%s: syntax error, %s" % (file.name, e.pos, e.msg)
+		sys.exit(1)
