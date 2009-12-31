@@ -79,17 +79,41 @@
 \------------------
 
 \p:
-	NEST was originally intended to be transformed into XHTML. This task is
-	performed by the program \code<n2x>.
-
-\p:
 	Since NEST is a markup language, you can interpret the structured text
-	however you want. You can for example, write DocBook in NEST.
+	however you want.
 
 
-\h2: Discussion
-\--------------
+\h3: NEST to XML
+\---------------
+\p:
+	XML is understood everywhere else, and NEST was originally invented to make
+	writing XML easier anyway. The program \code<n2x> performs this
+	transformation.  It is implemented using PLY (Python lex/yacc).
 
+
+\h3: XML to NEST
+\---------------
+\p:
+	The converse transformation from XML to NEST is quite easy, as no parser is
+	necessary.  This \code sed one-liner will get you started:
+	\pre <
+	sed --regexp-extended \
+		-e 's!<([^ </>!?]+)>([^>]+)</\1>$!\\\1: \2!g' \
+		-e 's!<([^ </>!?]+)>!\\\1<!g' \
+		-e 's!<([^ </>!?]+)([ \r\n]+([^<>]+))* +/>!\\\1[\3]<>!g' \
+		-e 's!<([^ </>!?]+)([ \r\n]+([^<>]+))*>!\\\1[\3]<!g' \
+		-e 's!</([^ </>!?]+)>!>!g' \
+	>
+	The first regex transform element that are opened and then closed at the end
+	of the same line to use NEST's oneline form.  The rests transform XML tags to
+	NEST's bracket form: the second regex converts opening tags without
+	attributes, the third converts self-closing tags with attributes, the fourth
+	converts opening tags with attributes, and the fifth convert closing tags.
+\p:	
+	Using \code sed means that we cannot convert tag declarations spreading over
+	many lines, but you can substitute Perl/Python/lex.
+\p:
+	The script \code x2n can do this in batch.
 
 \h2: Q&A
 \-------
@@ -117,21 +141,5 @@
 \div[class=a]:
 	NEST is a textual markup language, whereas YAML is a data serialization
 	format.
-
-\div[class=q]: How do I convert existing XML documents to NEST?
-\div[class=a]:
-	This one-liner will get you started by converting XML documents
-	to bracket-only NEST documents.
-	\pre <
-	sed --regexp-extended \
-	    -e 's!<([^ /]+)>!\\\1<!g' \
-	    -e 's!<([^ /]+)([ \r\n]+([^<>]*))* />!\\\1[\3]<>!g' \
-	    -e 's!<([^ /]+)([ \r\n]+([^<>]*))*>!\\\1[\3]<!g' \
-	    -e 's!</([^ ]+)>!>!g' \
-	    file.xml > file.nest
-	>
-	The script a2n can do this in batch.  Using \code sed means that we cannot
-	convert tag declarations which spread over many lines, but you can always
-	substitute Perl/Python here.
 
 >
