@@ -43,9 +43,8 @@ if __name__ == '__main__':
 		if lexonly:
 			for file in args:
 				if file is not sys.stdin:
-					lexer.input(open(file).read())
-				else:
-					lexer.input(file.read())
+					file = open(file)
+				lexer.input(file.read())
 			for t in lexer:
 				print t
 		else:
@@ -55,11 +54,10 @@ if __name__ == '__main__':
 				parse = xml
 			for file in args:
 				if file is not sys.stdin:
-					print parse(open(file).read(), debug=debug)
-				else:
-					print parse(sys.stdin.read(), debug=debug)
+					file = open(file)
+				print parse(file.read(), debug=debug)
 	except LexError as e:
-		print "%s:%s: illegal character '%s'" % (file.name, e.pos, e.msg)
+		print "%s:%s: lexical error, %s" % (file.name, e.pos, e.msg)
 		sys.exit(1)
 	except YaccError as e:
 		print "%s:%s: syntax error, %s" % (file.name, e.pos, e.msg)

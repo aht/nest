@@ -45,13 +45,21 @@ class Lexer(object):
 			"START1 START2 START3 START4 START5 END " + 
 			"CDATA ESCAPED WS").split()
 
+	# We keep track of the indentation using a stack where each
+	# element is a tuple of number of tabs, number of spaces.
+
 	def __init__(self, **kwargs):
 		self.lexer = lex.lex(object=self, **kwargs)
-		self.lvl_stack = [0]
+		self.lvl_stack = [(0, 0)]
 		self.emitted = []
 
 	def input(self, s):
 		self.lexer.input(s)
+
+	# We wrap around lex to permit programmatic emission of extra tokens
+	# which is necessary to handle the short-hand NEST forms and indentation.
+	# This is implemented using a stack to keep track of the hand-emitted tokens.
+	# If the stack is empty, a "real" token from lex is returned.
 
 	def emit(self, type, value='\n'):
 		t = lex.LexToken()
@@ -60,22 +68,6 @@ class Lexer(object):
 		t.lineno = self.lexer.lineno
 		t.lexpos = self.lexer.lexpos
 		self.emitted.append(t)
-
-	def emit_ENDs(self, lvl):
-		try:
-			idx = self.lvl_stack.index(lvl)
-		except ValueError:
-			raise LexError("bad indentation", self.lex.lineno)
-		while self.lexer.lexstate in ('oneword', 'oneline'):
-			self.emit('END')
-			self.lexer.pop_state()
-		for _ in range(idx, len(self.lvl_stack)-1):
-			self.emit('END')
-			self.lvl_stack.pop()
-			self.lexer.pop_state()
-			while self.lexer.lexstate in ('oneword', 'oneline'):
-				self.emit('END')
-				self.lexer.pop_state()
 
 	def token(self):
 		if self.emitted:
@@ -93,8 +85,30 @@ class Lexer(object):
 					yield t
 		return nexttok()
 
+	# check_endings should be called after recognizing a "real" END token containing a newline.
+	# The caller should determine the indentation level after that END token
+	# then pass it to check_endings, which will inspect the current lexer state
+	# and the indentation level stack to throw extra END tokens that are pending, if any.
+
+	def check_endings(self, tabs, spaces):
+		while self.lexer.lexstate in ('oneword', 'oneline'):
+			self.emit('END')
+			self.lexer.pop_state()
+		if (tabs <= self.lvl_stack[-1][0]) and (spaces <= self.lvl_stack[-1][1]):
+			try:
+				idx = self.lvl_stack.index((tabs, spaces))
+			except ValueError:
+				raise LexError("dedenting to a bad indentation level", self.lexer.lineno)
+			for _ in range(idx, len(self.lvl_stack)-1):
+				self.emit('END')
+				self.lvl_stack.pop()
+				self.lexer.pop_state()
+				while self.lexer.lexstate in ('oneword', 'oneline'):
+					self.emit('END')
+					self.lexer.pop_state()
+
 	t_INITIAL_CDATA = r'[^\\]+'
-	
+
 	def t_ANY_ESCAPED(self, t):
 		r'\\[\\<> ]'
 		t.value = t.value[1]
@@ -120,11 +134,10 @@ class Lexer(object):
 		return t
 
 	def t_ANY_error(self, t):
-		raise LexError(t.value[0], t.lexer.lineno)
-		t.lexer.skip(1)
+		raise LexError("illegal character '%s'" % t.value[0], t.lexer.lineno)
 
 	#________________
-	# attr
+	# state: attr
 
 	t_attr_ignore_WS = r'[ \t\r\n]+'
 
@@ -144,17 +157,22 @@ class Lexer(object):
 		pass
 
 	#________________
-	# body
+	# state: body
 
 	def t_body_START1(self, t):
-		r':[\r\n]+[\t]+'
+		r':[\r\n]+[ \t]+'
 		t.lexer.pop_state()
 		t.lexer.push_state('indent')
-		lvl = t.value.count('\t')
-		if lvl <= self.lvl_stack[-1]:
-			self.emit_ENDs(lvl)
+		tabs, spaces = t.value.count('\t'), t.value.count(' ')
+		if ((tabs >= self.lvl_stack[-1][0]) and (spaces > self.lvl_stack[-1][1])) \
+		or ((tabs > self.lvl_stack[-1][0]) and (spaces >= self.lvl_stack[-1][1])):
+			## new indentation level
+			self.lvl_stack.append((tabs, spaces))
+		elif (tabs <= self.lvl_stack[-1][0]) and (spaces <= self.lvl_stack[-1][1]):
+			raise LexError("element body must be more indented its start tag", t.lexer.lineno)
 		else:
-			self.lvl_stack.append(lvl)
+			raise LexError("indentation uncomparable to the previous level", t.lexer.lineno)
+
 		t.lexer.lineno += t.value.count('\n')
 		t.value = t.value[1:]
 		return t
@@ -186,15 +204,13 @@ class Lexer(object):
 		r'[\r\n]+[ \t]*'
 		t.lexer.pop_state()
 		self.emit('END')
-		lvl = t.value.count('\t')
-		if lvl <= self.lvl_stack[-1]:
-			self.emit_ENDs(lvl)
+		self.check_endings(t.value.count('\t'), t.value.count(' '))
 		t.lexer.lineno += t.value.count('\n')
 		t.value = ''
 		return t
 
 	#________________
-	# oneword
+	# state: oneword
 
 	def t_oneword_CDATA(self, t):
 		r'[^\\ \t\r\n]+'
@@ -209,15 +225,13 @@ class Lexer(object):
 		nl = t.value.count('\n')
 		if nl:
 			indent = re.match(r'.*[\r\n]+([ \t]*)', t.value).group(1)
-			lvl = indent.count('\t')
-			if lvl <= self.lvl_stack[-1]:
-				self.emit_ENDs(lvl)
+			self.check_endings(indent.count('\t'), indent.count(' '))
 		t.lexer.lineno += nl
 		t.value = ''
 		return t
 
 	#________________
-	# oneline
+	# state: oneline
 
 	def t_oneline_CDATA(self, t):
 		r'[^\\\r\n]+'
@@ -226,14 +240,12 @@ class Lexer(object):
 	def t_oneline_END(self, t):
 		r'[\r\n]+[\t]*'
 		t.lexer.pop_state()
-		lvl = t.value.count('\t')
-		if lvl <= self.lvl_stack[-1]:
-			self.emit_ENDs(lvl)
+		self.check_endings(t.value.count('\t'), t.value.count(' '))
 		t.lexer.lineno += t.value.count('\n')
 		return t
 
 	#________________
-	# bracket
+	# state: bracket
 
 	def t_bracket_CDATA(self, t):
 		r'[^\\>]+'
@@ -247,33 +259,33 @@ class Lexer(object):
 		return t
 
 	#________________
-	# indent
+	# state: indent
 
 	def t_indent_CDATA(self, t):
 		r'[^\\\r\n]+'
-		t.value += '\n' + '\t' * self.lvl_stack[-1]
+		t.value += '\n' + '\t' * self.lvl_stack[-1][0] + ' ' * self.lvl_stack[-1][1]
 		return t
 
 	def t_indent_END(self, t):
-		r'[\r\n]+[\t]*'
-		t.lexer.lineno += t.value.count('\n')
-		lvl = t.value.count('\t')
-		if lvl == self.lvl_stack[-1]:
+		r'[\r\n]+[\t ]*'
+		tabs, spaces = t.value.count('\t'), t.value.count(' ')
+		if (tabs, spaces) == self.lvl_stack[-1]:
 			pass
-		elif lvl > self.lvl_stack[-1]:
-			raise LexError("bad indentation", t.lexer.lineno)
+		elif (tabs > self.lvl_stack[-1][0]) or (spaces > self.lvl_stack[-1][1]):
+			raise LexError("indentation uncomparable the level previous level", t.lexer.lineno)
 		else:
 			self.lvl_stack.pop()
 			t.lexer.pop_state()
-			self.emit_ENDs(lvl)
+			self.check_endings(tabs, spaces)
 			return t
+
+
+# Use this to regenerate the table
+lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
 
 from table import lextab
 
-# Use this to regenerate the table
-# lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
-
-lexer = Lexer(lextab=lextab, optimize=1)
+# lexer = Lexer(lextab=lextab, optimize=1)
 
 
 #________________________________________________________________________

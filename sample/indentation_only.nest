@@ -2,13 +2,16 @@
 	stuff
 	\b:
 		\i:
-			text
+		    text
+		
 	\outer:
 		\inner:
-			spam
+			foo
+			bar
 
 		\inner:
-			ham
+		    spam
+		    ham
 		
 		\verse:
 			Roses are red

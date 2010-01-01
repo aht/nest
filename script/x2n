@@ -24,6 +24,11 @@ s!<\?([^ </>!]+)( +([^<>]+))*\?>\r?$!\\\?\1[\3]!g
 # Convert processing instructions
 s!<\?([^ </>!]+)( +([^<>]+))*\?>!\\\?\1[\3]<>!g
 
+
+## For !DOCTYPE and comments, which fit inside a single tag and may span
+## multiple lines, we just treat them as an element and let the rest of the
+## tag be treated as its body
+
 # Convert !DOCTYPEs
 s:<!DOCTYPE *:\\!DOCTYPE<:g
 
