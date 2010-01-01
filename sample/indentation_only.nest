@@ -6,8 +6,10 @@
 	\outer:
 		\inner:
 			spam
+
 		\inner:
 			ham
+		
 		\verse:
 			Roses are red
 			Violets are blue
