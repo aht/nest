@@ -1,28 +1,34 @@
-#!/usr/bin/env bash
+#!/bin/sed -rf
 
-change_ext () {
-	case ${1##*.} in
-		xml)    echo ${1%.*}.nest ;;
-		html)   echo ${1%.*}.nest ;;
-		xhtml)  echo ${1%.*}.nest ;;
-		*)      echo ${1}.nest ;;
-	esac
-}
+# Transform a whole element closed at EOL of the same line as its start tag
+s!<([^ </>!?]+)>([^>]+)</\1>\r?$!\\\1: \2!g
 
-#	The first regex transform element that are opened and then closed at the end
-#	of the same line to use NEST's oneline form.
+# Convert start tags without attributes
+s!<([^ </>!?]+)>!\\\1<!g
 
-#	The rests transform XML tags to NEST's bracket form: the second regex
-#	converts opening tags without attributes, the third converts self-closing
-#	tags with attributes, the fourth converts opening tags with attributes, and
-#	the fifth convert closing tags.
+# Convert self-closing elements with attributes that ends at EOL
+s!<([^ </>!?]+)( +([^<>]+))* */>\r?$!\\\1[\3]!g
 
-for file in "$@"; do
-sed --regexp-extended \
-	-e 's!<([^ </>!?]+)>([^>]+)</\1>$!\\\1: \2!g' \
-	-e 's!<([^ </>!?]+)>!\\\1<!g' \
-	-e 's!<([^ </>!?]+)([ \r\n]+([^<>]+))* +/>!\\\1[\3]<>!g' \
-	-e 's!<([^ </>!?]+)([ \r\n]+([^<>]+))*>!\\\1[\3]<!g' \
-	-e 's!</([^ </>!?]+)>!>!g' \
-	$file > $(change_ext $file)
-done
+# Convert self-closing elements with attributes
+s!<([^ </>!?]+)( +([^<>]+))* */>!\\\1[\3]<>!g
+
+# Convert start tags with attributes
+s!<([^ </>!?]+)( +([^<>]+))*>!\\\1[\3]<!g
+
+# Convert end tags
+s!</([^ </>!?]+)>!>!g
+
+# Convert processing instructions that are closed at EOL
+s!<\?([^ </>!]+)( +([^<>]+))*\?>\r?$!\\\?\1[\3]!g
+
+# Convert processing instructions
+s!<\?([^ </>!]+)( +([^<>]+))*\?>!\\\?\1[\3]<>!g
+
+# Convert !DOCTYPEs
+s:<!DOCTYPE *:\\!DOCTYPE<:g
+
+# Convert comments
+s:<!-- *:\\--<:g
+
+# Convert comment endings
+s:-->:>:g

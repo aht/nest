@@ -93,7 +93,7 @@ class Lexer(object):
 					yield t
 		return nexttok()
 
-	t_INITIAL_CDATA = r'[^\\]'
+	t_INITIAL_CDATA = r'[^\\]+'
 	
 	def t_ANY_ESCAPED(self, t):
 		r'\\[\\<> ]'
@@ -134,7 +134,7 @@ class Lexer(object):
 		return t
 
 	def t_attr_VALUE(self, t):
-		r'(\'.*\')|(".*")|[^= \\\t\r\n\]]+'
+		r'(\'.*?\')|(".*?")|[^= \\\t\r\n\]]+'
 		return t
 
 	def t_attr_END_ATTR(self, t):
@@ -270,6 +270,9 @@ class Lexer(object):
 
 from table import lextab
 
+# Use this to regenerate the table
+# lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
+
 lexer = Lexer(lextab=lextab, optimize=1)
 
 
@@ -404,7 +407,6 @@ from table import xmlbuilder
 
 xml = XMLBuilder(lexer=lexer,
 		tabmodule=xmlbuilder,
-		optimize=1,
 	).parse
 
 XHTML1_Strict = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -558,5 +560,4 @@ from table import etreebuilder
 
 etree = EtreeBuilder(lexer=lexer,
 		tabmodule=etreebuilder,
-		optimize=1
 	).parse
