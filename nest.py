@@ -45,8 +45,13 @@ class Lexer(object):
 			"START1 START2 START3 START4 START5 END " + 
 			"CDATA ESCAPED WS").split()
 
-	# We keep track of the indentation using a stack where each
+	# We keep track of indentation levels using a stack where each
 	# element is a tuple of number of tabs, number of spaces.
+
+	# We wrap around lex to permit programmatic emission of extra tokens
+	# which is necessary to handle NEST's shorthand styles and indentation.
+	# This is implemented using a stack to keep track of the hand-emitted tokens.
+	# A "real" token from lex is returned only when this stack is empty.
 
 	def __init__(self, **kwargs):
 		self.lexer = lex.lex(object=self, **kwargs)
@@ -55,11 +60,6 @@ class Lexer(object):
 
 	def input(self, s):
 		self.lexer.input(s)
-
-	# We wrap around lex to permit programmatic emission of extra tokens
-	# which is necessary to handle the short-hand NEST forms and indentation.
-	# This is implemented using a stack to keep track of the hand-emitted tokens.
-	# If the stack is empty, a "real" token from lex is returned.
 
 	def emit(self, type, value='\n'):
 		t = lex.LexToken()
@@ -164,14 +164,20 @@ class Lexer(object):
 		t.lexer.pop_state()
 		t.lexer.push_state('indent')
 		tabs, spaces = t.value.count('\t'), t.value.count(' ')
-		if ((tabs >= self.lvl_stack[-1][0]) and (spaces > self.lvl_stack[-1][1])) \
-		or ((tabs > self.lvl_stack[-1][0]) and (spaces >= self.lvl_stack[-1][1])):
+
+		# We treat tabs and spaces orthogonally.  A new indentation level -- a tuple
+		# of (tabs, spaces) -- is accepted only when one component increases
+		# while the other stay the same. This way, it will be easier to recognize
+		# indentation error when tabs and spaces are accidentally mixed.
+
+		if ((tabs == self.lvl_stack[-1][0]) and (spaces > self.lvl_stack[-1][1])) \
+		or ((tabs > self.lvl_stack[-1][0]) and (spaces == self.lvl_stack[-1][1])):
 			## new indentation level
 			self.lvl_stack.append((tabs, spaces))
 		elif (tabs <= self.lvl_stack[-1][0]) and (spaces <= self.lvl_stack[-1][1]):
-			raise LexError("element body must be more indented its start tag", t.lexer.lineno)
+			raise LexError("an element's body must be more indented its start tag", t.lexer.lineno)
 		else:
-			raise LexError("indentation uncomparable to the previous level", t.lexer.lineno)
+			raise LexError("indentation not comparable to the previous level", t.lexer.lineno)
 
 		t.lexer.lineno += t.value.count('\n')
 		t.value = t.value[1:]
@@ -272,7 +278,7 @@ class Lexer(object):
 		if (tabs, spaces) == self.lvl_stack[-1]:
 			pass
 		elif (tabs > self.lvl_stack[-1][0]) or (spaces > self.lvl_stack[-1][1]):
-			raise LexError("indentation uncomparable the level previous level", t.lexer.lineno)
+			raise LexError("indentation not comparable the level previous level", t.lexer.lineno)
 		else:
 			self.lvl_stack.pop()
 			t.lexer.pop_state()

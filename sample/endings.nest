@@ -10,15 +10,12 @@
 
 \being:
 	\and: \nothingness
-	\void
 
 \pointer:
-	to
-	\null:
+	to \void
 
 \pointer:
-	to
-	\nil: (in Lisp)
+	to \Lisp: \nil
 
 \first: and \second: and \third:
 	then \fourth \fifth:
