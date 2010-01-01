@@ -1,26 +1,40 @@
 #!/usr/bin/env python
 
-"""
-Read NEST from files given as sys.argv[1:] or stdin, write XML to stdout.
+"""Read NEST text from stdin or files given as program arguments.
+Write XML to stdout.
+
+Usage:
+	n2x [-ldh] file.xml ...
+
+Options:
+	-l	Perform lexical analysis only
+	-d	Print parser's debug information to stderr
+	-h	Include !DOCTYPE XHTML 1.0 Strict prolog
 """
 
 import getopt, os, sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from nest import Lexer, xml, LexError, YaccError
+from nest import Lexer, xml, xhtml, LexError, YaccError
 
 
 lexonly = False
 debug = False
+xhtml_prolog = False
 
 if __name__ == '__main__':
-	opts, args = getopt.getopt(sys.argv[1:], 'ld')
-	for o, v in opts:
+	opts, args = getopt.getopt(sys.argv[1:], 'ldh', 'help')
+	for o, v in opts:	
+		if o == '--help':
+			print __doc__
+			sys.exit()
 		if o == '-l':
 			lexonly = True
 		elif o == '-d':
 			debug = True
+		elif o == '-h':
+			xhtml_prolog = True
 	if not args:
 		args = [sys.stdin]
 
@@ -35,11 +49,15 @@ if __name__ == '__main__':
 			for t in lexer:
 				print t
 		else:
+			if xhtml_prolog:
+				parse = xhtml
+			else:
+				parse = xml
 			for file in args:
 				if file is not sys.stdin:
-					print xml(open(file).read(), debug=debug)
+					print parse(open(file).read(), debug=debug)
 				else:
-					print xml(sys.stdin.read(), debug=debug)
+					print parse(sys.stdin.read(), debug=debug)
 	except LexError as e:
 		print "%s:%s: illegal character '%s'" % (file.name, e.pos, e.msg)
 		sys.exit(1)

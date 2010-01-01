@@ -3,8 +3,10 @@
 """
 Parsers for NEST (Notation for Expressing Structrured Text)
 
-etree -- parse a NEST string and return an ElementTree
-xml -- parse a NEST string and return an XML string
+Functions:
+  etree -- parse a NEST string to an ElementTree
+  xml -- parse a NEST string to a XML string
+  xhtml -- parse a NEST string to a XML string with a XHTML 1.0 Strict prolog
 """
 
 __version__ = '0.0.1'
@@ -13,7 +15,11 @@ import re
 import lex, yacc
 
 from xml.sax.saxutils import escape, quoteattr
-from xml.etree.ElementTree import ElementTree, Element, Comment
+
+try:
+	from xml.etree.cElementTree import ElementTree, Element, Comment
+except ImportError:
+	from xml.etree.ElementTree import ElementTree, Element, Comment
 
 
 #________________________________________________________________________
@@ -276,7 +282,6 @@ class YaccError(Exception):
 	def __str__(self):
 		return '%s at line %s' % (self.msg, self.pos)
 
-
 class XMLBuilder(object):
 	def __init__(self, lexer=None, **kwargs):
 		if lexer:
@@ -286,8 +291,9 @@ class XMLBuilder(object):
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self, **kwargs)
 
-	def parse(self, input, **kwargs):
-		return self.parser.parse(input, lexer=self.lexer, **kwargs)
+	def parse(self, input, prolog='', **kwargs):
+		"""Parse a NEST string to XML with an optional prolog"""
+		return prolog + self.parser.parse(input, lexer=self.lexer, **kwargs)
 
 	def p_content11(self, p):
 		'''content : content element
@@ -401,6 +407,15 @@ xml = XMLBuilder(lexer=lexer,
 		optimize=1,
 	).parse
 
+XHTML1_Strict = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+'''
+
+from functools import partial
+
+xhtml = partial(xml, prolog=XHTML1_Strict)
+xhtml.__doc__ = "Parse a NEST string to XML with a XHTML 1.0 Strict !DOCTYPE prolog"
+
 
 class EtreeBuilder(object):
 	def __init__(self, lexer=None, **kwargs):
@@ -412,6 +427,7 @@ class EtreeBuilder(object):
 		self.parser = yacc.yacc(module=self, **kwargs)
 
 	def parse(self, input, **kwargs):
+		"Parse a NEST string to an ElementTree"
 		e = self.parser.parse(input, lexer=self.lexer, **kwargs)
 		return ElementTree(e)
 
