@@ -1,15 +1,17 @@
 Files in this project:
 
-  nest.py	 implements a lexer and two parsers
-  doc/     documentation
-  sample/	 sample NEST files
-  script/	 scripts for automatic conversion
+  nest.py    implements a lexer and two parsers
+  doc/       documentation
+  sample/    sample NEST files
+  script/
+    n2x      convert NEST to XML
+    x2n      convert XML to NEST
 
 
 Files imported from PLY:
 
-  lex.py	 lex
-  yacc.py	 yacc
+  lex.py     lex
+  yacc.py    yacc
 
 
 Files automatically generated files by lex and yacc:
