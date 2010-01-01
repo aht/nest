@@ -26,10 +26,10 @@ except ImportError:
 # Lexer
 
 class LexError(Exception):
-	def __init__(self, msg, pos):
-		self.msg, self.pos = msg, pos
+	def __init__(self, msg, lineno):
+		self.msg, self.lineno = msg, lineno
 	def __str__(self):
-		return '%s at line %s' % (self.msg, self.pos)
+		return '%s at line %s' % (self.msg, self.lineno)
 
 class Lexer(object):
 	states = (
@@ -147,7 +147,9 @@ class Lexer(object):
 		return t
 
 	def t_attr_VALUE(self, t):
-		r'(\'.*?\')|(".*?")|[^= \\\t\r\n\]]+'
+		r'(\'[^\']*\')|("[^"]*")|[^= \\\t\r\n\]]+'
+		if t.value[0] == t.value[-1] and t.value[0] in '\'"':
+			t.value = t.value[1:-1]
 		return t
 
 	def t_attr_END_ATTR(self, t):
@@ -298,10 +300,10 @@ from table import lextab
 # Parsers
 
 class YaccError(Exception):
-	def __init__(self, msg, pos):
-		self.msg, self.pos = msg, pos
+	def __init__(self, msg, lineno):
+		self.msg, self.lineno = msg, lineno
 	def __str__(self):
-		return '%s at line %s' % (self.msg, self.pos)
+		return '%s at line %s' % (self.msg, self.lineno)
 
 class XMLBuilder(object):
 	def __init__(self, lexer=None, **kwargs):

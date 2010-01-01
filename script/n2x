@@ -16,8 +16,7 @@ import getopt, os, sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
 
-from nest import Lexer, xml, xhtml, LexError, YaccError
-
+from nest import lexer, xml, xhtml, LexError, YaccError
 
 lexonly = False
 debug = False
@@ -38,7 +37,6 @@ if __name__ == '__main__':
 	if not args:
 		args = [sys.stdin]
 
-	lexer = Lexer()
 	try:
 		if lexonly:
 			for file in args:
@@ -57,8 +55,8 @@ if __name__ == '__main__':
 					file = open(file)
 				print parse(file.read(), debug=debug)
 	except LexError as e:
-		print "%s:%s: lexical error, %s" % (file.name, e.pos, e.msg)
+		print "%s:%s: lexical error, %s" % (file.name, e.lineno, e.msg)
 		sys.exit(1)
 	except YaccError as e:
-		print "%s:%s: syntax error, %s" % (file.name, e.pos, e.msg)
+		print "%s:%s: syntax error, %s" % (file.name, e.lineno, e.msg)
 		sys.exit(1)
