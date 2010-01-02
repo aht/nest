@@ -280,7 +280,7 @@ class Lexer(object):
 		if (tabs, spaces) == self.lvl_stack[-1]:
 			pass
 		elif (tabs > self.lvl_stack[-1][0]) or (spaces > self.lvl_stack[-1][1]):
-			raise LexError("indentation not comparable the level previous level", t.lexer.lineno)
+			raise LexError("indentation not comparable the previous level", t.lexer.lineno)
 		else:
 			self.lvl_stack.pop()
 			t.lexer.pop_state()
@@ -291,7 +291,7 @@ class Lexer(object):
 # Use this to regenerate the table
 lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
 
-from table import lextab
+# from table import lextab
 
 # lexer = Lexer(lextab=lextab, optimize=1)
 
