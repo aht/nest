@@ -1,0 +1,24 @@
+#!/bin/sed -rf
+
+# Expand CSS selectors
+# --------------------
+# Currently does not deal with additonal attributes list
+# or text containing dots on the same line.
+
+# NOTE: GNU sed has weird [] escaping rules: e.g. anything but ' #[<' is [^[ #<]+
+
+# Transform \tag#id to \tag[id=foo]
+s!(\\[^[ #<]+)#([^[ \.:<]+)!\1[id=\2]!g
+
+# Transform \tag.x.y to \tag[class=.x.y]
+s!(\\[^[ #\.<]+)((\.[^[ \.:<]+)+)!\1[class=\2]!g
+
+# Transform \tag#name.x.y to \tag[id=name class=.x.y]
+s!(\\[^[ #\.<]+)#([^[ \.]+)((\.[^[ \.:<]+)+)!\1[id=\2 class=\3]!g
+
+# Transform class=.x.z.y to class="x y z"
+/class=(\.[^] \.]+)+/ {
+	s!class=((\.[^] \.]+)+)!class="\1"!
+	s!class="\.([^ "]+)"!class="\1"!
+	/class="([^ \."]+\.?)+"/ y/./ /
+}

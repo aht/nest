@@ -289,11 +289,11 @@ class Lexer(object):
 
 
 # Use this to regenerate the table
-lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
+# lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
 
-# from table import lextab
+from table import lextab
 
-# lexer = Lexer(lextab=lextab, optimize=1)
+lexer = Lexer(lextab=lextab, optimize=1)
 
 
 #________________________________________________________________________
