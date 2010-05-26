@@ -2,25 +2,25 @@
 
 \foo \bar muah
 
-\x: there is \y: and also \z: but that would be all.
+\x there is \y and also \z but that would be all.
 
-\spam: x \and y \ham <
+\spam x \and y \ham <
 	z
 >
 
 \being:
-	\and: \nothingness
+	\and \nothingness
 
 \pointer:
 	to \void
 
 \pointer:
-	to \Lisp: \nil
+	to \Lisp \nil
 
-\first: and \second: and \third:
+\first and \second and \third:
 	then \fourth \fifth:
 		finally
-		\sixth: \seventh: \eight \ninth \tenth <
+		\sixth \seventh \eight \ninth \tenth <
 			treasure hidden well inside
 		>
 

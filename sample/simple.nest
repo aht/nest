@@ -5,8 +5,8 @@ stuff
 \b \i text
 
 \outer:
-	\inner: spam
-	\inner: ham
+	\inner spam
+	\inner ham
 
 	\verse <
 	Roses are red

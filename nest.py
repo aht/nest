@@ -9,7 +9,7 @@ Functions:
   xhtml -- parse a NEST string to a XML string with a XHTML 1.0 Strict prolog
 """
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 import re
 import lex, yacc
@@ -36,13 +36,12 @@ class Lexer(object):
 		('attr','exclusive'),
 		('body', 'exclusive'),
 		('bracket','exclusive'),
-		('oneword', 'exclusive'),
 		('oneline','exclusive'),
 		('indent','exclusive'),
 	)
 
 	tokens = ("TAG TAG_ATTR COMMENT ATTR_EQ VALUE " +
-			"START1 START2 START3 START4 START5 END " + 
+			"STARTI STARTL STARTB END " + 
 			"CDATA ESCAPED WS").split()
 
 	# We keep track of indentation levels using a stack where each
@@ -85,13 +84,14 @@ class Lexer(object):
 					yield t
 		return nexttok()
 
-	# check_endings should be called after recognizing a "real" END token containing a newline.
-	# The caller should determine the indentation level after that END token
-	# then pass it to check_endings, which will inspect the current lexer state
-	# and the indentation level stack to throw extra END tokens that are pending, if any.
+	# check_endings should be called after recognizing a "real" END token
+	# containing a newline.  The caller should determine the indentation level
+	# after that END token then pass it to check_endings, which will inspect
+	# the current lexer state and the indentation level stack to throw extra
+	# END tokens that are pending, if any.
 
 	def check_endings(self, tabs, spaces):
-		while self.lexer.lexstate in ('oneword', 'oneline'):
+		while self.lexer.lexstate == 'oneline':
 			self.emit('END')
 			self.lexer.pop_state()
 		if (tabs <= self.lvl_stack[-1][0]) and (spaces <= self.lvl_stack[-1][1]):
@@ -103,7 +103,7 @@ class Lexer(object):
 				self.emit('END')
 				self.lvl_stack.pop()
 				self.lexer.pop_state()
-				while self.lexer.lexstate in ('oneword', 'oneline'):
+				while self.lexer.lexstate == 'oneline':
 					self.emit('END')
 					self.lexer.pop_state()
 
@@ -161,7 +161,7 @@ class Lexer(object):
 	#________________
 	# state: body
 
-	def t_body_START1(self, t):
+	def t_body_STARTI(self, t):
 		r':[\r\n]+[ \t]+'
 		t.lexer.pop_state()
 		t.lexer.push_state('indent')
@@ -170,29 +170,21 @@ class Lexer(object):
 		# We treat tabs and spaces orthogonally.  A new indentation level -- a tuple
 		# of (tabs, spaces) -- is accepted only when one component increases
 		# while the other stay the same. This way, it will be easier to recognize
-		# indentation error when tabs and spaces are accidentally mixed.
+		# indentation error when tabs and spaces are mixed -- accidentally or not.
 
 		if ((tabs == self.lvl_stack[-1][0]) and (spaces > self.lvl_stack[-1][1])) \
 		or ((tabs > self.lvl_stack[-1][0]) and (spaces == self.lvl_stack[-1][1])):
-			## new indentation level
 			self.lvl_stack.append((tabs, spaces))
 		elif (tabs <= self.lvl_stack[-1][0]) and (spaces <= self.lvl_stack[-1][1]):
-			raise LexError("an element's body must be more indented its start tag", t.lexer.lineno)
+			raise LexError("an element's body must be more indented than its start tag", t.lexer.lineno)
 		else:
-			raise LexError("indentation not comparable to the previous level", t.lexer.lineno)
+			raise LexError("indentation not comparable to previous levels", t.lexer.lineno)
 
 		t.lexer.lineno += t.value.count('\n')
 		t.value = t.value[1:]
 		return t
 
-	def t_body_START2(self, t):
-		r':[ \t]*'
-		t.lexer.pop_state()
-		t.lexer.push_state('oneline')
-		t.value = ''
-		return t
-
-	def t_body_START3(self, t):
+	def t_body_STARTB(self, t):
 		r'[ \t\r\n]*<'
 		t.lexer.pop_state()
 		t.lexer.push_state('bracket')
@@ -200,41 +192,10 @@ class Lexer(object):
 		t.value = t.value[:-1]
 		return t
 
-	def t_body_START4(self, t):
-		r'[ \t]+'
+	def t_body_STARTL(self, t):
+		r'[ \t]*'
 		t.lexer.pop_state()
-		t.lexer.push_state('oneword')
-		t.value = ''
-		return t
-
-	# oneword style with empty body
-	def t_body_START5(self, t):
-		r'[\r\n]+[ \t]*'
-		t.lexer.pop_state()
-		self.emit('END')
-		self.check_endings(t.value.count('\t'), t.value.count(' '))
-		t.lexer.lineno += t.value.count('\n')
-		t.value = ''
-		return t
-
-	#________________
-	# state: oneword
-
-	def t_oneword_CDATA(self, t):
-		r'[^\\ \t\r\n]+'
-		return t
-
-	def t_oneword_END(self, t):
-		r'[ \t\r\n]+'
-		t.lexer.pop_state()
-		while t.lexer.lexstate == 'oneword':
-			self.emit('END')
-			t.lexer.pop_state()
-		nl = t.value.count('\n')
-		if nl:
-			indent = re.match(r'.*[\r\n]+([ \t]*)', t.value).group(1)
-			self.check_endings(indent.count('\t'), indent.count(' '))
-		t.lexer.lineno += nl
+		t.lexer.push_state('oneline')
 		t.value = ''
 		return t
 
@@ -280,7 +241,7 @@ class Lexer(object):
 		if (tabs, spaces) == self.lvl_stack[-1]:
 			pass
 		elif (tabs > self.lvl_stack[-1][0]) or (spaces > self.lvl_stack[-1][1]):
-			raise LexError("indentation not comparable the previous level", t.lexer.lineno)
+			raise LexError("indentation not comparable to previous levels", t.lexer.lineno)
 		else:
 			self.lvl_stack.pop()
 			t.lexer.pop_state()
@@ -292,7 +253,6 @@ class Lexer(object):
 # lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
 
 from table import lextab
-
 lexer = Lexer(lextab=lextab, optimize=1)
 
 
@@ -337,45 +297,39 @@ class XMLBuilder(object):
 		p[0] = p[1]
 
 	def p_element_attr1(self, p):
-		'''element : TAG_ATTR avlist START1 content END
-		           | TAG_ATTR avlist START2 content END
-		           | TAG_ATTR avlist START3 content END
-		           | TAG_ATTR avlist START4 content END'''
+		'''element : TAG_ATTR avlist STARTI content END
+		           | TAG_ATTR avlist STARTL content END
+		           | TAG_ATTR avlist STARTB content END'''
 		p[0] = '<%s %s>%s%s</%s>%s' % (p[1], p[2], p[3], p[4], p[1], p[5])
 
 	def p_element_attr0(self, p):
-		'''element : TAG_ATTR avlist START1 END
-		           | TAG_ATTR avlist START3 END
-		           | TAG_ATTR avlist START4 END
-		           | TAG_ATTR avlist START5 END'''
+		'''element : TAG_ATTR avlist STARTI END
+		           | TAG_ATTR avlist STARTL END
+		           | TAG_ATTR avlist STARTB END'''
 		p[0] = '%s<%s %s />%s' % (p[3], p[1], p[2], p[4])
 
 	def p_element1(self, p):
-		'''element : TAG START1 content END
-		           | TAG START2 content END
-		           | TAG START3 content END
-		           | TAG START4 content END'''
+		'''element : TAG STARTI content END
+		           | TAG STARTL content END
+		           | TAG STARTB content END'''
 		p[0] = '<%s>%s%s</%s>%s' % (p[1], p[2], p[3], p[1], p[4])
 
 	def p_element0(self, p):
-		'''element : TAG START1 END
-		           | TAG START3 END
-		           | TAG START4 END
-		           | TAG START5 END'''
+		'''element : TAG STARTI END
+		           | TAG STARTL END
+		           | TAG STARTB END'''
 		p[0] = '%s<%s />%s' % (p[2], p[1], p[3])
 
 	def p_comment1(self, p):
-		'''comment : COMMENT START1 content END
-		           | COMMENT START2 content END
-		           | COMMENT START3 content END
-		           | COMMENT START4 content END'''
+		'''comment : COMMENT STARTI content END
+		           | COMMENT STARTL content END
+		           | COMMENT STARTB content END'''
 		p[0] = ''
 
 	def p_comment0(self, p):
-		'''comment : COMMENT START1 END
-		           | COMMENT START3 END
-		           | COMMENT START4 END
-		           | COMMENT START5 END'''
+		'''comment : COMMENT STARTI END
+		           | COMMENT STARTL END
+		           | COMMENT STARTB END'''
 		p[0] = ''
 
 	def p_avlist(self, p):
@@ -410,12 +364,6 @@ class XMLBuilder(object):
 		         | ESCAPED'''
 		p[0] = p[1]
 	
-	def p_START2_error(self, p):
-		'''element : TAG START2 END
-		           | TAG_ATTR avlist START2 END
-		           | COMMENT START2 END'''
-		raise YaccError("empty body not allowed in oneline form", p.lineno(1))
-	
 	def p_error(self, t):
 		if t:
 			raise YaccError("token %s" % t.type, t.lineno)
@@ -423,11 +371,11 @@ class XMLBuilder(object):
 			raise YaccError("unexpected EOF", '$')
 
 
-from table import xmlbuilder
+# Use this to regenerate the table
+# xml = XMLBuilder(lexer=lexer).parse
 
-xml = XMLBuilder(lexer=lexer,
-		tabmodule=xmlbuilder,
-	).parse
+from table import xmlbuilder
+xml = XMLBuilder(lexer=lexer, tabmodule=xmlbuilder).parse
 
 XHTML1_Strict = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -454,10 +402,9 @@ class EtreeBuilder(object):
 		return ElementTree(e)
 
 	def p_element_attr1(self, p):
-		'''element : TAG_ATTR avlist START1 content END
-		           | TAG_ATTR avlist START2 content END
-		           | TAG_ATTR avlist START3 content END
-		           | TAG_ATTR avlist START4 content END'''
+		'''element : TAG_ATTR avlist STARTI content END
+		           | TAG_ATTR avlist STARTL content END
+		           | TAG_ATTR avlist STARTB content END'''
 		p[0] = Element(p[1], **dict(p[2]))
 		for i, e in enumerate(p[4]):
 			if isinstance(e, basestring):
@@ -470,17 +417,15 @@ class EtreeBuilder(object):
 				last = e
 
 	def p_element_attr0(self, p):
-		'''element : TAG_ATTR avlist START1 END
-		           | TAG_ATTR avlist START3 END
-		           | TAG_ATTR avlist START4 END
-		           | TAG_ATTR avlist START5 END'''
+		'''element : TAG_ATTR avlist STARTI END
+		           | TAG_ATTR avlist STARTL END
+		           | TAG_ATTR avlist STARTB END'''
 		p[0] = Element(p[1], **dict(p[2]))
 
 	def p_element1(self, p):
-		'''element : TAG START1 content END
-		           | TAG START2 content END
-		           | TAG START3 content END
-		           | TAG START4 content END'''
+		'''element : TAG STARTI content END
+		           | TAG STARTL content END
+		           | TAG STARTB content END'''
 		p[0] = Element(p[1])
 		for i, e in enumerate(p[3]):
 			if isinstance(e, basestring):
@@ -493,24 +438,21 @@ class EtreeBuilder(object):
 				last = e
 
 	def p_element0(self, p):
-		'''element : TAG START1 END
-		           | TAG START3 END
-		           | TAG START4 END
-		           | TAG START5 END'''
+		'''element : TAG STARTI END
+		           | TAG STARTL END
+		           | TAG STARTB END'''
 		p[0] = Element(p[1])
 
 	def p_comment1(self, p):
-		'''comment : COMMENT START1 content END
-		           | COMMENT START2 content END
-		           | COMMENT START3 content END
-		           | COMMENT START4 content END'''
+		'''comment : COMMENT STARTI content END
+		           | COMMENT STARTL content END
+		           | COMMENT STARTB content END'''
 		p[0] = Comment(p[3])
 
 	def p_comment0(self, p):
-		'''comment : COMMENT START1 END
-		           | COMMENT START3 END
-		           | COMMENT START4 END
-		           | COMMENT START5 END'''
+		'''comment : COMMENT STARTI END
+		           | COMMENT STARTL END
+		           | COMMENT STARTB END'''
 		p[0] = Comment()
 
 	def p_content11(self, p):
@@ -563,12 +505,6 @@ class EtreeBuilder(object):
 		         | ESCAPED'''
 		p[0] = p[1]
 
-	def p_START2_error(self, p):
-		'''element : TAG START2 END
-		           | TAG_ATTR avlist START2 END
-		           | COMMENT START2 END'''
-		raise YaccError("empty body not allowed in oneline form", p.lineno(1))
-
 	def p_error(self, t):
 		if t:
 			raise YaccError("token %s" % t.type, t.lineno)
@@ -576,8 +512,8 @@ class EtreeBuilder(object):
 			raise YaccError("unexpected EOF", '$')
 
 
-from table import etreebuilder
+# Use this to regenerate the table
+# etree = EtreeBuilder(lexer=lexer).parse
 
-etree = EtreeBuilder(lexer=lexer,
-		tabmodule=etreebuilder,
-	).parse
+from table import etreebuilder
+etree = EtreeBuilder(lexer=lexer, tabmodule=etreebuilder).parse
