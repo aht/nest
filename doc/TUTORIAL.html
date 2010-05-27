@@ -8,40 +8,37 @@
 
 <h2>Introduction</h2>
 <p>
-	NEST stands for 
-	<em>Notation for Expressing Structured Text</em>. It is a markup
+	NEST stands for <em>Notation for Expressing Structured Text</em>. It is a markup
 	language with the same semantics as XML but is designed to be more readable
-	and easier to write by hand.
-	</p>
+	and easier to write by hand.</p>
 
 
 <h2>Syntax</h2>
 <p>
 	NEST can express familiar XML concepts such as elements, tags and attributes.
 	A structural element is introduced by a backslash followed by the tag name;
-	the content of the element follows in enclosing angle brackets, like this:
-	</p>
-<pre>    \html &lt;
+	the content of the element follows in enclosing angle brackets, like this:</p>
+<pre>
+    \html &lt;
         Your page goes here.
     &gt;
 </pre>
 
 <p>
-	There are two shortcuts to make NEST more human-friendly than XML:
-	</p>
+	There are two shortcuts to make NEST more human-friendly than XML:</p>
 
 <p>
 	Tags without following brackets take the rest of the line to be the
-	content, e.g.
-	</p>
-<pre>    \title NEST documentation
+	content, e.g.</p>
+<pre>
+    \title NEST documentation
     \author Yours truly
 </pre>
 
 <p>
-	Tags followed by a colon take an indented block to be the content, e.g.
-	</p>
-<pre>    \blockquote:
+	Tags followed by a colon take an indented block to be the content, e.g.</p>
+<pre>
+    \blockquote:
         Immature poets imitate; mature poets steal; bad poets
         deface what they take, and good poets make it into
         something better, or at least something different.
@@ -50,28 +47,24 @@
 
 <p>
 	Attributes are placed between the tag and the content in enclosing square
-	brackets,  similarly to XML, e.g.
-	</p>
-<pre>    \div [id="main" class="long article"] &lt; ... &gt;
+	brackets,  similarly to XML, e.g.</p>
+<pre>
+    \div [id="main" class="long article"] &lt; ... &gt;
 </pre>
 
 <p>
 	NEST's directives can be escaped with the backslash, for example
-	<code>\\tag</code> is a literal 
-	<code>\tag</code> (in contrast, a 
-	<code>&lt;tag&gt;</code> in
-	XML is 
-	<code>&amp;lt;tag&amp;gt;</code>).  Brackets that are not part of any tag are
-	also treated as literals.
-	</p>
+	<code>\\tag</code> is a literal <code>\tag</code> (in contrast, a <code>&lt;tag&gt;</code> in
+	XML is <code>&amp;lt;tag&amp;gt;</code>).  Brackets that are not part of any tag are
+	also treated as literals.</p>
 
 <p>
 	NEST allows comments in the form of
 	<code>\==+ &lt; ... </code>&gt; or
 	<code>\--+ &lt; ... </code>&gt;.
-	Empty comments should be used decoratively to make NEST source code more readable, e.g.
-	</p>
-<pre>    \h2 Introduction
+	Empty comments should be used decoratively to make NEST source code more readable, e.g.</p>
+<pre>
+    \h2 Introduction
     \----------------
 </pre>
 
@@ -79,29 +72,23 @@
 <h2>Transformation</h2>
 <p>
 	Since NEST is a markup language, you can interpret the structured text
-	however you want.
-	</p>
+	however you want.</p>
 
 <h3>NEST to XML</h3>
 <p>
 	XML is understood everywhere else, and NEST was originally invented to make
-	writing XML easier anyway. The program 
-	<code>n2x</code> performs this
-	transformation.  It is implemented using PLY (Python lex/yacc).
-	</p>
+	writing XML easier anyway. The program <code>n2x</code> performs this
+	transformation.  It is implemented using PLY (Python lex/yacc).</p>
 
 <h3>XML to NEST</h3>
 <p>
 	The converse transformation from XML to NEST is quite easy.
-	A simple 
-	<code>sed</code> script, provided as x2n, can work for many
-	X(H)TML files.
-	</p>
+	A simple <code>sed</code> script, provided as x2n, can work for many
+	X(H)TML files.</p>
 <p>
 	<code>sed</code>, however, is not a real parser and you cannot convert
 	tag declarations spreading over many lines.  A better converter may be
-	written in the future if needed.
-	</p>
+	written in the future if needed.</p>
 
 
 <h2>Q&amp;A</h2>
@@ -109,16 +96,15 @@
 </div>
 <div class="a"><p>
 	Overlapping tags, e.g.
-	<pre>    &lt;foo&gt; spam &lt;bar&gt; inter-mingled with &lt;/foo&gt; ham &lt;/bar&gt;</pre>I certainly hope that this "feature" will not be missed!
-	</p>
+	<pre>    &lt;foo&gt; spam &lt;bar&gt; inter-mingled with &lt;/foo&gt; ham &lt;/bar&gt;</pre>
+	I certainly hope that this "feature" will not be missed!</p>
 
 </div>
 <div class="q"><h4>What's the relation between NEST and XML?</h4>
 </div>
 <div class="a"><p>
 	NEST is a markup language with the same semantics as XML. Practically, this
-	means that NEST is an alternative notation for XML.
-	</p>
+	means that NEST is an alternative notation for XML.</p>
 
 </div>
 <div class="q"><h4>What's the relation between NEST and HAML?</h4>
@@ -129,16 +115,14 @@
 	than HAML, yet more human-friendly.  For example, it is easier to nest
 	multiple tags on the same line.  White-space preservation is also an issue
 	with HAML: it is very awkward to write code and poetry.  NEST also
-	supports more flexible indentation rules.
-	</p>
+	supports more flexible indentation rules.</p>
 
 </div>
 <div class="q"><h4>What's the relation between NEST and YAML?</h4>
 </div>
 <div class="a"><p>
 	NEST is a textual markup language, whereas YAML is a data serialization
-	format.  NEST is suitable for documents that are mainly text.
-	</p>
+	format.  NEST is suitable for documents that are mainly text.</p>
 
 </div>
 </body>

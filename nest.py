@@ -40,9 +40,9 @@ class Lexer(object):
 		('indent','exclusive'),
 	)
 
-	tokens = ("TAG TAG_ATTR COMMENT ATTR_EQ VALUE " +
-			"STARTI STARTL STARTB END " + 
-			"CDATA ESCAPED WS").split()
+	tokens = ("TAG TAG_ATTR COMMENT ATTR_EQ VALUE" +
+			" STARTB STARTL STARTI END" +
+			" CDATA ESCAPED WS").split()
 
 	# We keep track of indentation levels using a stack where each
 	# element is a tuple of number of tabs, number of spaces.
@@ -53,26 +53,26 @@ class Lexer(object):
 	# A "real" token from lex is returned only when this stack is empty.
 
 	def __init__(self, **kwargs):
-		self.lexer = lex.lex(object=self, **kwargs)
+		self.lex = lex.lex(object=self, **kwargs)
 		self.lvl_stack = [(0, 0)]
 		self.emitted = []
 
 	def input(self, s):
-		self.lexer.input(s)
+		self.lex.input(s)
 
 	def emit(self, type, value='\n'):
 		t = lex.LexToken()
 		t.type = type
 		t.value = value
-		t.lineno = self.lexer.lineno
-		t.lexpos = self.lexer.lexpos
+		t.lineno = self.lex.lineno
+		t.lexpos = self.lex.lexpos
 		self.emitted.append(t)
 
 	def token(self):
 		if self.emitted:
 			return self.emitted.pop()
 		else:
-			return self.lexer.token()
+			return self.lex.token()
 
 	def __iter__(self):
 		def nexttok():
@@ -91,21 +91,21 @@ class Lexer(object):
 	# END tokens that are pending, if any.
 
 	def check_endings(self, tabs, spaces):
-		while self.lexer.lexstate == 'oneline':
+		while self.lex.lexstate == 'oneline':
 			self.emit('END')
-			self.lexer.pop_state()
+			self.lex.pop_state()
 		if (tabs <= self.lvl_stack[-1][0]) and (spaces <= self.lvl_stack[-1][1]):
 			try:
 				idx = self.lvl_stack.index((tabs, spaces))
 			except ValueError:
-				raise LexError("dedenting to a bad indentation level", self.lexer.lineno)
+				raise LexError("dedenting to a bad indentation level", self.lex.lineno)
 			for _ in range(idx, len(self.lvl_stack)-1):
 				self.emit('END')
 				self.lvl_stack.pop()
-				self.lexer.pop_state()
-				while self.lexer.lexstate == 'oneline':
+				self.lex.pop_state()
+				while self.lex.lexstate == 'oneline':
 					self.emit('END')
-					self.lexer.pop_state()
+					self.lex.pop_state()
 
 	t_INITIAL_CDATA = r'[^\\]+'
 
@@ -179,7 +179,6 @@ class Lexer(object):
 			raise LexError("an element's body must be more indented than its start tag", t.lexer.lineno)
 		else:
 			raise LexError("indentation not comparable to previous levels", t.lexer.lineno)
-
 		t.lexer.lineno += t.value.count('\n')
 		t.value = t.value[1:]
 		return t
@@ -232,14 +231,19 @@ class Lexer(object):
 
 	def t_indent_CDATA(self, t):
 		r'[^\\\r\n]+'
-		t.value += '\n' + '\t' * self.lvl_stack[-1][0] + ' ' * self.lvl_stack[-1][1]
 		return t
 
 	def t_indent_END(self, t):
 		r'[\r\n]+[\t ]*'
 		tabs, spaces = t.value.count('\t'), t.value.count(' ')
 		if (tabs, spaces) == self.lvl_stack[-1]:
-			pass
+			# not really a dedentation
+			c = lex.LexToken()
+			c.type = 'CDATA'
+			c.value = t.value
+			c.lineno = t.lineno
+			c.lexpos = t.lexpos
+			return c
 		elif (tabs > self.lvl_stack[-1][0]) or (spaces > self.lvl_stack[-1][1]):
 			raise LexError("indentation not comparable to previous levels", t.lexer.lineno)
 		else:
@@ -247,13 +251,6 @@ class Lexer(object):
 			t.lexer.pop_state()
 			self.check_endings(tabs, spaces)
 			return t
-
-
-# Use this to regenerate the table
-# lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
-
-from table import lextab
-lexer = Lexer(lextab=lextab, optimize=1)
 
 
 #________________________________________________________________________
@@ -369,22 +366,6 @@ class XMLBuilder(object):
 			raise YaccError("token %s" % t.type, t.lineno)
 		else:
 			raise YaccError("unexpected EOF", '$')
-
-
-# Use this to regenerate the table
-# xml = XMLBuilder(lexer=lexer).parse
-
-from table import xmlbuilder
-xml = XMLBuilder(lexer=lexer, tabmodule=xmlbuilder).parse
-
-XHTML1_Strict = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-'''
-
-from functools import partial
-
-xhtml = partial(xml, prolog=XHTML1_Strict)
-xhtml.__doc__ = "Parse a NEST string to XML with a XHTML 1.0 Strict !DOCTYPE prolog"
 
 
 class EtreeBuilder(object):
@@ -512,8 +493,21 @@ class EtreeBuilder(object):
 			raise YaccError("unexpected EOF", '$')
 
 
-# Use this to regenerate the table
-# etree = EtreeBuilder(lexer=lexer).parse
+# Uncomment to regenerate the tables
+# lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
+# xml = XMLBuilder(lexer=lexer, outputdir='table', tabmodule='xmlbuilder').parse
+# etree = EtreeBuilder(lexer=lexer, outputdir='table', tabmodule='etreebuilder').parse
 
-from table import etreebuilder
+from functools import partial
+from table import lextab, xmlbuilder, etreebuilder
+
+lexer = Lexer(lextab=lextab, optimize=1)
+
+xml = XMLBuilder(lexer=lexer, tabmodule=xmlbuilder).parse
+XHTML1_Strict = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+'''
+xhtml = partial(xml, prolog=XHTML1_Strict)
+xhtml.__doc__ = "Parse a NEST string to XML with a XHTML 1.0 Strict !DOCTYPE prolog"
+
 etree = EtreeBuilder(lexer=lexer, tabmodule=etreebuilder).parse

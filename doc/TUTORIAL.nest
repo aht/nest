@@ -25,7 +25,8 @@
 	NEST can express familiar XML concepts such as elements, tags and attributes.
 	A structural element is introduced by a backslash followed by the tag name;
 	the content of the element follows in enclosing angle brackets, like this:
-\pre<    \\html <
+\pre<
+    \\html <
         Your page goes here.
     \>
 >
@@ -36,13 +37,15 @@
 \p:
 	Tags without following brackets take the rest of the line to be the
 	content, e.g.
-\pre<    \\title NEST documentation
+\pre<
+    \\title NEST documentation
     \\author Yours truly
 >
 
 \p:
 	Tags followed by a colon take an indented block to be the content, e.g.
-\pre<    \\blockquote:
+\pre<
+    \\blockquote:
         Immature poets imitate; mature poets steal; bad poets
         deface what they take, and good poets make it into
         something better, or at least something different.
@@ -52,7 +55,8 @@
 \p:
 	Attributes are placed between the tag and the content in enclosing square
 	brackets,  similarly to XML, e.g.
-\pre<    \\div [id="main" class="long article"] < ... \>
+\pre<
+    \\div [id="main" class="long article"] < ... \>
 >
 
 \p:
@@ -66,7 +70,8 @@
 	\code<\\==+ < ... >> or
 	\code<\\--+ < ... >>.
 	Empty comments should be used decoratively to make NEST source code more readable, e.g.
-\pre<    \\h2 Introduction
+\pre<
+    \\h2 Introduction
     \\----------------
 >
 

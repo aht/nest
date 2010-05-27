@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
-"""Read NEST text from stdin or files given as program arguments.
+"""Read NEST text from stdin or from file named by the arguments.
 Write XML to stdout.
 
 Usage:
-	n2x [-ldh] file.xml ...
+	n2x [-ldh] [file1] [file2] ...
 
 Options:
 	-l	Perform lexical analysis only
 	-d	Print parser's debug information to stderr
-	-h	Include !DOCTYPE XHTML 1.0 Strict prolog
+	-x	Include !DOCTYPE XHTML 1.0 Strict prolog
 """
 
 import getopt, os, sys
@@ -23,16 +23,16 @@ debug = False
 xhtml_prolog = False
 
 if __name__ == '__main__':
-	opts, args = getopt.getopt(sys.argv[1:], 'ldh', 'help')
+	opts, args = getopt.getopt(sys.argv[1:], 'ldxh', 'help')
 	for o, v in opts:	
-		if o == '--help':
+		if o == '-h' or o == '--help':
 			print __doc__
 			sys.exit()
 		if o == '-l':
 			lexonly = True
 		elif o == '-d':
 			debug = True
-		elif o == '-h':
+		elif o == '-x':
 			xhtml_prolog = True
 	if not args:
 		args = [sys.stdin]
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 					file = open(file)
 				lexer.input(file.read())
 			for t in lexer:
-				print t
+				print t, lexer.lex.lexstate
 		else:
 			if xhtml_prolog:
 				parse = xhtml

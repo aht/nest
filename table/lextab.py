@@ -1,6 +1,6 @@
 # lextab.py. This file automatically created by PLY (version 3.3). Don't edit!
 _tabversion   = '3.3'
-_lextokens    = {'COMMENT': 1, 'TAG': 1, 'END': 1, 'ATTR_EQ': 1, 'VALUE': 1, 'ESCAPED': 1, 'STARTI': 1, 'WS': 1, 'CDATA': 1, 'TAG_ATTR': 1, 'STARTB': 1, 'STARTL': 1}
+_lextokens    = {'COMMENT': 1, 'STARTI': 1, 'END': 1, 'ATTR_EQ': 1, 'VALUE': 1, 'ESCAPED': 1, 'TAG': 1, 'WS': 1, 'CDATA': 1, 'TAG_ATTR': 1, 'STARTB': 1, 'STARTL': 1}
 _lexreflags   = 0
 _lexliterals  = ''
 _lexstateinfo = {'body': 'exclusive', 'indent': 'exclusive', 'attr': 'exclusive', 'INITIAL': 'inclusive', 'bracket': 'exclusive', 'oneline': 'exclusive'}
