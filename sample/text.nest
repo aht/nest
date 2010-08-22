@@ -1,0 +1,26 @@
+\html<
+
+\h1 title
+\========
+
+\====< This is a comment but can be used decoratively, like the one under the \\h1 >
+
+\div[class=content]:
+
+    \p Notice that tags without brackets only goes until the end of line.
+
+    \p You may close off the tags by indentation (notice the ":").
+    
+    \blockquote:
+        Immature poets imitate; mature poets steal; bad poets
+        deface what they take, and good poets make it into
+        something better, or at least something different.
+        — T.S. Eliot, The Sacred Wood
+
+\p You can do inline \b<bold text>, \code<\em<λ>x. x+1>.
+
+\p I personally like when you can nest arbitrary tags after each other (hence the name), e.g.
+
+\footer \div[style="float: right"] \p Yours truly
+
+>

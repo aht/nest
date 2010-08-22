@@ -191,12 +191,14 @@ class Lexer(object):
 		t.value = t.value[:-1]
 		return t
 
+	# TODO: require space and write a separate empty body rule
 	def t_body_STARTL(self, t):
 		r'[ \t]*'
 		t.lexer.pop_state()
 		t.lexer.push_state('oneline')
 		t.value = ''
 		return t
+
 
 	#________________
 	# state: oneline
