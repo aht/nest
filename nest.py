@@ -35,13 +35,12 @@ class Lexer(object):
 	states = (
 		('attr','exclusive'),
 		('body', 'exclusive'),
-		('bracket','exclusive'),
 		('oneline','exclusive'),
 		('indent','exclusive'),
 	)
 
 	tokens = ("TAG TAG_ATTR COMMENT ATTR_EQ VALUE" +
-			" STARTB STARTL STARTI END" +
+			" STARTL STARTI END" +
 			" CDATA ESCAPED WS").split()
 
 	# We keep track of indentation levels using a stack where each
@@ -110,7 +109,7 @@ class Lexer(object):
 	t_INITIAL_CDATA = r'[^\\]+'
 
 	def t_ANY_ESCAPED(self, t):
-		r'\\[\\<> ]'
+		r'\\[\\ ]'
 		t.value = t.value[1]
 		return t
 
@@ -121,14 +120,14 @@ class Lexer(object):
 		return t
 
 	def t_ANY_TAG_ATTR(self, t):
-		r'\\[^ \t\r\n\[\]<>:]+[ \t\r\n]*\['
+		r'\\[^ \t\r\n\[\]:]+[ \t\r\n]*\['
 		t.lexer.push_state('attr')
 		t.lexer.lineno += t.value.count('\n')
 		t.value = t.value[1:-1]
 		return t
 
 	def t_ANY_TAG(self, t):
-		r'\\[^ \t\r\n\[\]<>:]+'
+		r'\\[^ \t\r\n\[\]:]+'
 		t.lexer.push_state('body')
 		t.value = t.value[1:]
 		return t
@@ -183,14 +182,6 @@ class Lexer(object):
 		t.value = t.value[1:]
 		return t
 
-	def t_body_STARTB(self, t):
-		r'[ \t\r\n]*<'
-		t.lexer.pop_state()
-		t.lexer.push_state('bracket')
-		t.lexer.lineno += t.value.count('\n')
-		t.value = t.value[:-1]
-		return t
-
 	# TODO: require space and write a separate empty body rule
 	def t_body_STARTL(self, t):
 		r'[ \t]*'
@@ -212,20 +203,6 @@ class Lexer(object):
 		t.lexer.pop_state()
 		self.check_endings(t.value.count('\t'), t.value.count(' '))
 		t.lexer.lineno += t.value.count('\n')
-		return t
-
-	#________________
-	# state: bracket
-
-	def t_bracket_CDATA(self, t):
-		r'[^\\>]+'
-		t.lexer.lineno += t.value.count('\n')
-		return t
-
-	def t_bracket_END(self, t):
-		r'>'
-		t.lexer.pop_state()
-		t.value = ''
 		return t
 
 	#________________
@@ -284,11 +261,11 @@ class XMLBuilder(object):
 	
 	def p_content10(self, p):
 		'''content : content cdata'''
-		p[0] = p[1] + escape(p[2])
+		p[0] = p[1] + p[2]
 
 	def p_content00(self, p):
 		'''content : cdata'''
-		p[0] = escape(p[1])
+		p[0] = p[1]
 
 	def p_content01(self, p):
 		'''content : element
@@ -297,38 +274,32 @@ class XMLBuilder(object):
 
 	def p_element_attr1(self, p):
 		'''element : TAG_ATTR avlist STARTI content END
-		           | TAG_ATTR avlist STARTL content END
-		           | TAG_ATTR avlist STARTB content END'''
+		           | TAG_ATTR avlist STARTL content END'''
 		p[0] = '<%s %s>%s%s</%s>%s' % (p[1], p[2], p[3], p[4], p[1], p[5])
 
 	def p_element_attr0(self, p):
 		'''element : TAG_ATTR avlist STARTI END
-		           | TAG_ATTR avlist STARTL END
-		           | TAG_ATTR avlist STARTB END'''
+		           | TAG_ATTR avlist STARTL END'''
 		p[0] = '%s<%s %s />%s' % (p[3], p[1], p[2], p[4])
 
 	def p_element1(self, p):
 		'''element : TAG STARTI content END
-		           | TAG STARTL content END
-		           | TAG STARTB content END'''
+		           | TAG STARTL content END'''
 		p[0] = '<%s>%s%s</%s>%s' % (p[1], p[2], p[3], p[1], p[4])
 
 	def p_element0(self, p):
 		'''element : TAG STARTI END
-		           | TAG STARTL END
-		           | TAG STARTB END'''
+		           | TAG STARTL END'''
 		p[0] = '%s<%s />%s' % (p[2], p[1], p[3])
 
 	def p_comment1(self, p):
 		'''comment : COMMENT STARTI content END
-		           | COMMENT STARTL content END
-		           | COMMENT STARTB content END'''
+		           | COMMENT STARTL content END'''
 		p[0] = ''
 
 	def p_comment0(self, p):
 		'''comment : COMMENT STARTI END
-		           | COMMENT STARTL END
-		           | COMMENT STARTB END'''
+		           | COMMENT STARTL END'''
 		p[0] = ''
 
 	def p_avlist(self, p):
@@ -386,8 +357,7 @@ class EtreeBuilder(object):
 
 	def p_element_attr1(self, p):
 		'''element : TAG_ATTR avlist STARTI content END
-		           | TAG_ATTR avlist STARTL content END
-		           | TAG_ATTR avlist STARTB content END'''
+		           | TAG_ATTR avlist STARTL content END'''
 		p[0] = Element(p[1], **dict(p[2]))
 		for i, e in enumerate(p[4]):
 			if isinstance(e, basestring):
@@ -401,14 +371,12 @@ class EtreeBuilder(object):
 
 	def p_element_attr0(self, p):
 		'''element : TAG_ATTR avlist STARTI END
-		           | TAG_ATTR avlist STARTL END
-		           | TAG_ATTR avlist STARTB END'''
+		           | TAG_ATTR avlist STARTL END'''
 		p[0] = Element(p[1], **dict(p[2]))
 
 	def p_element1(self, p):
 		'''element : TAG STARTI content END
-		           | TAG STARTL content END
-		           | TAG STARTB content END'''
+		           | TAG STARTL content END'''
 		p[0] = Element(p[1])
 		for i, e in enumerate(p[3]):
 			if isinstance(e, basestring):
@@ -422,20 +390,17 @@ class EtreeBuilder(object):
 
 	def p_element0(self, p):
 		'''element : TAG STARTI END
-		           | TAG STARTL END
-		           | TAG STARTB END'''
+		           | TAG STARTL END'''
 		p[0] = Element(p[1])
 
 	def p_comment1(self, p):
 		'''comment : COMMENT STARTI content END
-		           | COMMENT STARTL content END
-		           | COMMENT STARTB content END'''
+		           | COMMENT STARTL content END'''
 		p[0] = Comment(p[3])
 
 	def p_comment0(self, p):
 		'''comment : COMMENT STARTI END
-		           | COMMENT STARTL END
-		           | COMMENT STARTB END'''
+		           | COMMENT STARTL END'''
 		p[0] = Comment()
 
 	def p_content11(self, p):
@@ -495,7 +460,7 @@ class EtreeBuilder(object):
 			raise YaccError("unexpected EOF", '$')
 
 
-# Uncomment to regenerate the tables
+### Uncomment these to regenerate the tables
 # lexer = Lexer(outputdir='table', lextab='lextab', optimize=1)
 # xml = XMLBuilder(lexer=lexer, outputdir='table', tabmodule='xmlbuilder').parse
 # etree = EtreeBuilder(lexer=lexer, outputdir='table', tabmodule='etreebuilder').parse

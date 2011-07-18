@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '\xe3\xaf\x8f\x92Q\xbf@\xe4-\xf4\xd9BWD\xc1g'
+_lr_signature = '\xbf\xda\xce\xc4h6g\xb7\x0b\xe4;\xdd1\xcc\xbb\xb5'
     
-_lr_action_items = {'COMMENT':([4,5,6,10,11,13,14,15,16,17,18,19,20,21,23,24,25,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,],[12,12,12,-23,-10,-22,12,-35,-34,-24,-11,12,-12,12,12,12,12,12,12,12,-20,-7,-19,-21,-32,-33,-8,-9,-4,12,-5,12,-6,12,-16,12,-17,12,-18,12,-1,-2,-3,-13,-14,-15,]),'TAG':([0,4,5,6,10,11,13,14,15,16,17,18,19,20,21,23,24,25,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,],[1,1,1,1,-23,-10,-22,1,-35,-34,-24,-11,1,-12,1,1,1,1,1,1,1,-20,-7,-19,-21,-32,-33,-8,-9,-4,1,-5,1,-6,1,-16,1,-17,1,-18,1,-1,-2,-3,-13,-14,-15,]),'END':([4,5,6,10,11,13,14,15,16,17,18,19,20,21,23,24,25,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,],[11,18,20,-23,-10,-22,33,-35,-34,-24,-11,38,-12,39,40,42,44,48,50,52,-20,-7,-19,-21,-32,-33,-8,-9,-4,54,-5,55,-6,56,-16,57,-17,58,-18,59,-1,-2,-3,-13,-14,-15,]),'TAG_ATTR':([0,4,5,6,10,11,13,14,15,16,17,18,19,20,21,23,24,25,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,],[3,3,3,3,-23,-10,-22,3,-35,-34,-24,-11,3,-12,3,3,3,3,3,3,3,-20,-7,-19,-21,-32,-33,-8,-9,-4,3,-5,3,-6,3,-16,3,-17,3,-18,3,-1,-2,-3,-13,-14,-15,]),'ATTR_EQ':([3,7,8,22,26,27,28,46,47,],[9,-26,9,-25,-30,-31,-27,-28,-29,]),'VALUE':([9,26,27,28,46,47,],[26,-30,-31,46,-28,-29,]),'ESCAPED':([4,5,6,9,10,11,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,],[15,15,15,27,-23,-10,-22,15,-35,-34,36,-11,15,-12,15,15,15,15,-30,-31,47,15,15,15,-20,-7,-19,36,-32,-33,-8,-9,-4,15,-5,15,-6,15,-28,-29,-16,15,-17,15,-18,15,-1,-2,-3,-13,-14,-15,]),'STARTI':([1,7,8,12,22,26,27,28,46,47,],[4,-26,23,29,-25,-30,-31,-27,-28,-29,]),'CDATA':([4,5,6,10,11,13,14,15,16,17,18,19,20,21,23,24,25,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,],[16,16,16,-23,-10,-22,16,-35,-34,37,-11,16,-12,16,16,16,16,16,16,16,-20,-7,-19,37,-32,-33,-8,-9,-4,16,-5,16,-6,16,-16,16,-17,16,-18,16,-1,-2,-3,-13,-14,-15,]),'STARTL':([1,7,8,12,22,26,27,28,46,47,],[5,-26,24,30,-25,-30,-31,-27,-28,-29,]),'STARTB':([1,7,8,12,22,26,27,28,46,47,],[6,-26,25,31,-25,-30,-31,-27,-28,-29,]),'$end':([2,11,18,20,33,38,39,40,42,44,54,55,56,],[0,-10,-11,-12,-7,-8,-9,-4,-5,-6,-1,-2,-3,]),}
+_lr_action_items = {'COMMENT':([4,5,9,10,12,13,14,15,16,17,18,20,21,25,26,27,28,29,30,31,32,33,34,35,36,37,40,41,42,43,44,45,46,47,],[11,11,-17,-7,-16,11,-29,-28,-18,-8,11,11,11,11,11,-14,-5,-13,-15,-26,-27,-6,-3,11,-4,11,-11,11,-12,11,-1,-2,-9,-10,]),'TAG':([0,4,5,9,10,12,13,14,15,16,17,18,20,21,25,26,27,28,29,30,31,32,33,34,35,36,37,40,41,42,43,44,45,46,47,],[1,1,1,-17,-7,-16,1,-29,-28,-18,-8,1,1,1,1,1,-14,-5,-13,-15,-26,-27,-6,-3,1,-4,1,-11,1,-12,1,-1,-2,-9,-10,]),'END':([4,5,9,10,12,13,14,15,16,17,18,20,21,25,26,27,28,29,30,31,32,33,34,35,36,37,40,41,42,43,44,45,46,47,],[10,17,-17,-7,-16,28,-29,-28,-18,-8,33,34,36,40,42,-14,-5,-13,-15,-26,-27,-6,-3,44,-4,45,-11,46,-12,47,-1,-2,-9,-10,]),'ATTR_EQ':([3,6,7,19,22,23,24,38,39,],[8,-20,8,-19,-24,-25,-21,-22,-23,]),'TAG_ATTR':([0,4,5,9,10,12,13,14,15,16,17,18,20,21,25,26,27,28,29,30,31,32,33,34,35,36,37,40,41,42,43,44,45,46,47,],[3,3,3,-17,-7,-16,3,-29,-28,-18,-8,3,3,3,3,3,-14,-5,-13,-15,-26,-27,-6,-3,3,-4,3,-11,3,-12,3,-1,-2,-9,-10,]),'VALUE':([8,22,23,24,38,39,],[22,-24,-25,38,-22,-23,]),'ESCAPED':([4,5,8,9,10,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,],[14,14,23,-17,-7,-16,14,-29,-28,31,-8,14,14,14,-24,-25,39,14,14,-14,-5,-13,31,-26,-27,-6,-3,14,-4,14,-22,-23,-11,14,-12,14,-1,-2,-9,-10,]),'STARTI':([1,6,7,11,19,22,23,24,38,39,],[4,-20,20,25,-19,-24,-25,-21,-22,-23,]),'CDATA':([4,5,9,10,12,13,14,15,16,17,18,20,21,25,26,27,28,29,30,31,32,33,34,35,36,37,40,41,42,43,44,45,46,47,],[15,15,-17,-7,-16,15,-29,-28,32,-8,15,15,15,15,15,-14,-5,-13,32,-26,-27,-6,-3,15,-4,15,-11,15,-12,15,-1,-2,-9,-10,]),'STARTL':([1,6,7,11,19,22,23,24,38,39,],[5,-20,21,26,-19,-24,-25,-21,-22,-23,]),'$end':([2,10,17,28,33,34,36,44,45,],[0,-7,-8,-5,-6,-3,-4,-1,-2,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'comment':([4,5,6,14,19,21,23,24,25,29,30,31,41,43,45,49,51,53,],[10,10,10,32,32,32,10,10,10,10,10,10,32,32,32,32,32,32,]),'attrvalue':([3,8,],[7,22,]),'value':([9,],[28,]),'element':([0,4,5,6,14,19,21,23,24,25,29,30,31,41,43,45,49,51,53,],[2,13,13,13,34,34,34,13,13,13,13,13,13,34,34,34,34,34,34,]),'content':([4,5,6,23,24,25,29,30,31,],[14,19,21,41,43,45,49,51,53,]),'cdata':([4,5,6,14,19,21,23,24,25,29,30,31,41,43,45,49,51,53,],[17,17,17,35,35,35,17,17,17,17,17,17,35,35,35,35,35,35,]),'avlist':([3,],[8,]),}
+_lr_goto_items = {'comment':([4,5,13,18,20,21,25,26,35,37,41,43,],[9,9,27,27,9,9,9,9,27,27,27,27,]),'attrvalue':([3,7,],[6,19,]),'value':([8,],[24,]),'element':([0,4,5,13,18,20,21,25,26,35,37,41,43,],[2,12,12,29,29,12,12,12,12,29,29,29,29,]),'content':([4,5,20,21,25,26,],[13,18,35,37,41,43,]),'cdata':([4,5,13,18,20,21,25,26,35,37,41,43,],[16,16,30,30,16,16,16,16,30,30,30,30,]),'avlist':([3,],[7,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,39 +26,33 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> element","S'",1,None,None,None),
-  ('element -> TAG_ATTR avlist STARTI content END','element',5,'p_element_attr1','nest.py',388),
-  ('element -> TAG_ATTR avlist STARTL content END','element',5,'p_element_attr1','nest.py',389),
-  ('element -> TAG_ATTR avlist STARTB content END','element',5,'p_element_attr1','nest.py',390),
-  ('element -> TAG_ATTR avlist STARTI END','element',4,'p_element_attr0','nest.py',403),
-  ('element -> TAG_ATTR avlist STARTL END','element',4,'p_element_attr0','nest.py',404),
-  ('element -> TAG_ATTR avlist STARTB END','element',4,'p_element_attr0','nest.py',405),
-  ('element -> TAG STARTI content END','element',4,'p_element1','nest.py',409),
-  ('element -> TAG STARTL content END','element',4,'p_element1','nest.py',410),
-  ('element -> TAG STARTB content END','element',4,'p_element1','nest.py',411),
-  ('element -> TAG STARTI END','element',3,'p_element0','nest.py',424),
-  ('element -> TAG STARTL END','element',3,'p_element0','nest.py',425),
-  ('element -> TAG STARTB END','element',3,'p_element0','nest.py',426),
-  ('comment -> COMMENT STARTI content END','comment',4,'p_comment1','nest.py',430),
-  ('comment -> COMMENT STARTL content END','comment',4,'p_comment1','nest.py',431),
-  ('comment -> COMMENT STARTB content END','comment',4,'p_comment1','nest.py',432),
-  ('comment -> COMMENT STARTI END','comment',3,'p_comment0','nest.py',436),
-  ('comment -> COMMENT STARTL END','comment',3,'p_comment0','nest.py',437),
-  ('comment -> COMMENT STARTB END','comment',3,'p_comment0','nest.py',438),
-  ('content -> content element','content',2,'p_content11','nest.py',442),
-  ('content -> content comment','content',2,'p_content11','nest.py',443),
-  ('content -> content cdata','content',2,'p_content10','nest.py',448),
-  ('content -> element','content',1,'p_content0','nest.py',454),
-  ('content -> comment','content',1,'p_content0','nest.py',455),
-  ('content -> cdata','content',1,'p_content0','nest.py',456),
-  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','nest.py',460),
-  ('avlist -> attrvalue','avlist',1,'p_avlist0','nest.py',464),
-  ('attrvalue -> ATTR_EQ value','attrvalue',2,'p_attrvalue','nest.py',468),
-  ('value -> value VALUE','value',2,'p_value','nest.py',472),
-  ('value -> value ESCAPED','value',2,'p_value','nest.py',473),
-  ('value -> VALUE','value',1,'p_value0','nest.py',477),
-  ('value -> ESCAPED','value',1,'p_value0','nest.py',478),
-  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','nest.py',482),
-  ('cdata -> cdata CDATA','cdata',2,'p_cdata','nest.py',483),
-  ('cdata -> CDATA','cdata',1,'p_cdata0','nest.py',487),
-  ('cdata -> ESCAPED','cdata',1,'p_cdata0','nest.py',488),
+  ('element -> TAG_ATTR avlist STARTI content END','element',5,'p_element_attr1','nest.py',359),
+  ('element -> TAG_ATTR avlist STARTL content END','element',5,'p_element_attr1','nest.py',360),
+  ('element -> TAG_ATTR avlist STARTI END','element',4,'p_element_attr0','nest.py',373),
+  ('element -> TAG_ATTR avlist STARTL END','element',4,'p_element_attr0','nest.py',374),
+  ('element -> TAG STARTI content END','element',4,'p_element1','nest.py',378),
+  ('element -> TAG STARTL content END','element',4,'p_element1','nest.py',379),
+  ('element -> TAG STARTI END','element',3,'p_element0','nest.py',392),
+  ('element -> TAG STARTL END','element',3,'p_element0','nest.py',393),
+  ('comment -> COMMENT STARTI content END','comment',4,'p_comment1','nest.py',397),
+  ('comment -> COMMENT STARTL content END','comment',4,'p_comment1','nest.py',398),
+  ('comment -> COMMENT STARTI END','comment',3,'p_comment0','nest.py',402),
+  ('comment -> COMMENT STARTL END','comment',3,'p_comment0','nest.py',403),
+  ('content -> content element','content',2,'p_content11','nest.py',407),
+  ('content -> content comment','content',2,'p_content11','nest.py',408),
+  ('content -> content cdata','content',2,'p_content10','nest.py',413),
+  ('content -> element','content',1,'p_content0','nest.py',419),
+  ('content -> comment','content',1,'p_content0','nest.py',420),
+  ('content -> cdata','content',1,'p_content0','nest.py',421),
+  ('avlist -> avlist attrvalue','avlist',2,'p_avlist','nest.py',425),
+  ('avlist -> attrvalue','avlist',1,'p_avlist0','nest.py',429),
+  ('attrvalue -> ATTR_EQ value','attrvalue',2,'p_attrvalue','nest.py',433),
+  ('value -> value VALUE','value',2,'p_value','nest.py',437),
+  ('value -> value ESCAPED','value',2,'p_value','nest.py',438),
+  ('value -> VALUE','value',1,'p_value0','nest.py',442),
+  ('value -> ESCAPED','value',1,'p_value0','nest.py',443),
+  ('cdata -> cdata ESCAPED','cdata',2,'p_cdata','nest.py',447),
+  ('cdata -> cdata CDATA','cdata',2,'p_cdata','nest.py',448),
+  ('cdata -> CDATA','cdata',1,'p_cdata0','nest.py',452),
+  ('cdata -> ESCAPED','cdata',1,'p_cdata0','nest.py',453),
 ]
