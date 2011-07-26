@@ -13,12 +13,6 @@ Files in this project:
     x2n      convert XML to NEST
 
 
-Files imported from PLY:
-
-  lex.py     lex
-  yacc.py    yacc
-
-
 Files automatically generated files by lex and yacc:
 
   table/

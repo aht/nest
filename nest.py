@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Parsers for NEST (Notation for Expressing Structrured Text)
+Parsers for NEST (Notation for Expressing Structrured Text).
 
 Functions:
   etree -- parse a NEST string to an ElementTree
@@ -12,7 +12,7 @@ Functions:
 __version__ = '0.0.2'
 
 import re
-import lex, yacc
+from ply import lex, yacc
 
 from xml.sax.saxutils import escape, quoteattr
 
