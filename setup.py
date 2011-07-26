@@ -39,6 +39,6 @@ setup(
 	url = 'http://github.com/aht/nest',
 	platforms=['any'],
 	classifiers=filter(None, classifiers.split("\n")),
-	py_modules = ['nest'],
+	packages = ['nest', 'nest.table'],
 	scripts=['script/n2x', 'script/x2n'],
 )
