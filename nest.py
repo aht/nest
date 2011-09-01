@@ -13,6 +13,7 @@ __version__ = '0.0.2'
 
 import re
 import lex, yacc
+import sys
 
 from xml.sax.saxutils import escape, quoteattr
 
@@ -199,7 +200,7 @@ class Lexer(object):
 		return t
 
 	def t_oneline_END(self, t):
-		r'[\r\n]+[\t]*'
+		r'[\r\n]+[\t ]*'
 		t.lexer.pop_state()
 		self.check_endings(t.value.count('\t'), t.value.count(' '))
 		t.lexer.lineno += t.value.count('\n')
