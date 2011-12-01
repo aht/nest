@@ -3,7 +3,7 @@
 #________________________________________________________________________
 # Parsers
 
-from lexer import Lexer, generate_lextab
+from lexer import nest_lexer
 
 from ply import yacc
 from xml.sax.saxutils import escape, quoteattr
@@ -22,11 +22,8 @@ class YaccError(Exception):
 
 
 class XMLBuilder(object):
-	def __init__(self, lexer=None, **kwargs):
-		if lexer:
-			self.lexer = lexer
-		else:
-			self.lexer = Lexer()
+	def __init__(self, **kwargs):
+		self.lexer = nest_lexer
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self, **kwargs)
 
@@ -128,11 +125,8 @@ class XMLBuilder(object):
 
 
 class EtreeBuilder(object):
-	def __init__(self, lexer=None, **kwargs):
-		if lexer:
-			self.lexer = lexer
-		else:
-			self.lexer = Lexer()
+	def __init__(self, **kwargs):
+		self.lexer = nest_lexer
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self, **kwargs)
 
@@ -252,20 +246,14 @@ class EtreeBuilder(object):
 			raise YaccError("unexpected EOF", '$')
 
 
-try:
-    from table import lextab
-    lexer = Lexer(lextab=lextab, optimize=1)
-except ImportError:
-    lexer = generate_lextab()
-
 def generate_xmlbuilder():
     import os
     dir = os.path.join(os.path.dirname(__file__), 'table')
-    return XMLBuilder(lexer=lexer, outputdir=dir, tabmodule='xmlbuilder')
+    return XMLBuilder(outputdir=dir, tabmodule='xmlbuilder')
 
 try:
     from table import xmlbuilder
-    xml = XMLBuilder(lexer=lexer, tabmodule=xmlbuilder).parse
+    xml = XMLBuilder(tabmodule=xmlbuilder).parse
 except ImportError:
     xml = generate_xmlbuilder().parse
 
@@ -281,11 +269,11 @@ xhtml.__doc__ = "Parse a NEST string to XML with a XHTML 1.0 Strict !DOCTYPE pro
 def generate_etreebuilder():
     import os
     dir = os.path.join(os.path.dirname(__file__), 'table')
-    return EtreeBuilder(lexer=lexer, outputdir=dir, tabmodule='etreebuilder')
+    return EtreeBuilder(outputdir=dir, tabmodule='etreebuilder')
 
 try:
     from table import etreebuilder
-    etree = EtreeBuilder(lexer=lexer, tabmodule=etreebuilder).parse
+    etree = EtreeBuilder(tabmodule=etreebuilder).parse
 except ImportError:
     etree = generate_etreebuilder().parse
 

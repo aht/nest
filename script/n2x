@@ -14,7 +14,8 @@ Options:
 
 import getopt, os, sys
 
-from nest import lexer, xml, xhtml, LexError, YaccError
+from nest.lexer import nest_lexer, LexError
+from nest.parser import xml, xhtml, YaccError
 
 lexonly = False
 debug = False
@@ -40,9 +41,9 @@ if __name__ == '__main__':
 			for file in args:
 				if file is not sys.stdin:
 					file = open(file)
-				lexer.input(file.read())
-			for t in lexer:
-				print t, lexer.lex.lexstate
+				nest_lexer.input(file.read())
+			for t in nest_lexer:
+				print t, nest_lexer.lex.lexstate
 		else:
 			if xhtml_prolog:
 				parse = xhtml

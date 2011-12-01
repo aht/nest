@@ -8,6 +8,3 @@ Functions:
 """
 
 __version__ = '0.0.2'
-
-from lexer import LexError
-from parser import xml, xhtml, etree, YaccError

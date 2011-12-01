@@ -14,7 +14,7 @@ class LexError(Exception):
 		return '%s at line %s' % (self.msg, self.lineno)
 
 
-class Lexer(object):
+class NestLexer(object):
 	states = (
 		('attr','exclusive'),
 		('body', 'exclusive'),
@@ -241,12 +241,15 @@ class Lexer(object):
 def generate_lextab():
     import os
     dir = os.path.join(os.path.dirname(__file__), 'table')
-    return Lexer(outputdir=dir, lextab='lextab', optimize=1)
+    return NestLexer(outputdir=dir, lextab='lextab', optimize=1)
 
 try:
     from table import lextab
 except ImportError:
-    generate_lextab()
+    nest_lexer = generate_lextab()
+else:
+    nest_lexer = NestLexer(lextab=lextab, optimize=1)
+
 
 if __name__ == '__main__':
     generate_lextab()
