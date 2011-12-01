@@ -3,3 +3,4 @@
 *.swp
 parsetab.py
 build
+nest/table/*
