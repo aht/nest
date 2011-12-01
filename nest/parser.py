@@ -22,10 +22,11 @@ class YaccError(Exception):
 
 
 class XMLBuilder(object):
-	def __init__(self, **kwargs):
+	def __init__(self, xmlescape=False, **kwargs):
 		self.lexer = nest_lexer
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self, **kwargs)
+		self.escapefn = escape if xmlescape else (lambda x: x)
 
 	def parse(self, input, prolog='', **kwargs):
 		"""Parse a NEST string to XML with an optional prolog"""
@@ -38,11 +39,11 @@ class XMLBuilder(object):
 	
 	def p_content10(self, p):
 		'''content : content cdata'''
-		p[0] = p[1] + escape(p[2])
+		p[0] = p[1] + self.escapefn(p[2])
 
 	def p_content00(self, p):
 		'''content : cdata'''
-		p[0] = escape(p[1])
+		p[0] = self.escapefn(p[1])
 
 	def p_content01(self, p):
 		'''content : element
