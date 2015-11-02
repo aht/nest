@@ -46,9 +46,9 @@ if __name__ == '__main__':
 				print t, nest_lexer.lex.lexstate
 		else:
 			if xhtml_prolog:
-				parse = xhtml
-			else:
 				parse = xml
+			else:
+				parse = xhtml
 			for file in args:
 				if file is not sys.stdin:
 					file = open(file)

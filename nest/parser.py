@@ -259,11 +259,13 @@ except ImportError:
     xml = generate_xmlbuilder().parse
 
 
-from functools import partial
 XHTML1_Strict = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 '''
-xhtml = partial(xml, prolog=XHTML1_Strict)
+HTML5 = '''<!DOCTYPE html>'''
+
+from functools import partial
+xhtml = partial(xml, prolog=HTML5)
 xhtml.__doc__ = "Parse a NEST string to XML with a XHTML 1.0 Strict !DOCTYPE prolog"
 
 
